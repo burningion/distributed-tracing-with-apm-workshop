@@ -6,7 +6,7 @@ services:
       - DD_API_KEY
       - DD_APM_ENABLED=true
     ports:
-      - "8126:8126"
+      - 8126:8126
   web:
     environment:
       - FLASK_APP=api.py
@@ -19,3 +19,17 @@ services:
       - "./app:/app"
     depends_on:
       - agent
+      - db
+  db:
+    image: postgres:11-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    
