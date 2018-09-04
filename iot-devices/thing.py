@@ -22,4 +22,4 @@ traced_app = TraceMiddleware(app, tracer, service='edge-thing')
 
 @app.route('/')
 def hello():
-    return Response({'hello': 'world'}, mimetype='application/json')
+    return Response({'Hello from IoT Device': 'world'}, mimetype='application/json')

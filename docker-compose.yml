@@ -20,7 +20,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - "./app:/app"
+      - "./frontend:/app"
     depends_on:
       - agent
       - db
