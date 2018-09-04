@@ -25,16 +25,18 @@ traced_app = TraceMiddleware(app, tracer, service='edge-thing')
 def hello():
     return Response({'Hello from Sensors': 'world'}, mimetype='application/json')
 
-# forget REST for now
-@app.route('/add_sensor')
-def add_sensor():
-    sensors.append({'sensor_no': len(sensors) + 1, 'value': random.randint(1,100)})
-    return jsonify(sensors)
-
-@app.route('/get_sensors')
+@app.route('/sensors', methods=['GET', 'PUT'])
 def get_sensors():
-    return jsonify({'sensor_count': len(sensors),
-                    'system_status': sensors})
+    if flask_request.method == 'GET':
+        return jsonify({'sensor_count': len(sensors),
+                        'system_status': sensors})
+    elif flask_request.method == 'PUT':
+        sensors.append({'sensor_no': len(sensors) + 1, 'value': random.randint(1,100)})
+        return jsonify(sensors)
+    else:
+        err = jsonify({'error': 'Invalid request method'})
+        err.status_code = 405
+        return err
 
 @app.route('/refresh_sensors')
 def refresh_sensors():

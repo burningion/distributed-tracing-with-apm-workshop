@@ -7,7 +7,7 @@ from flask import request as flask_request
 
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
-
+import random
 
 # Tracer configuration
 tracer.configure(hostname='agent')
@@ -28,7 +28,18 @@ iot_devices = [{'pump_no': 1, 'status': 'OFF'},
 def hello():
     return Response({'Hello from IoT Device': 'world'}, mimetype='application/json')
 
-@app.route('/get_devices')
+@app.route('/devices', methods=['GET', 'PUT'])
 def status():
-    return jsonify({'pump_count': len(iot_devices),
-                    'status': iot_devices})
+    global iot_devices
+    if flask_request.method == 'GET':
+        return jsonify({'pump_count': len(iot_devices),
+                        'status': iot_devices})
+    elif flask_request.method == 'PUT':
+        # create a new device w/ random status
+        iot_devices.append({'pump_no': len(iot_devices) + 1, 
+                            'status': random.choice(['OFF', 'ON'])})
+        return jsonify(iot_devices)
+    else:
+        err = jsonify({'error': 'Invalid request method'})
+        err.status_code = 405
+        return err
