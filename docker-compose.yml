@@ -11,7 +11,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-  web:
+  frontend:
     environment:
       - FLASK_APP=api.py
       - FLASK_DEBUG=1
@@ -35,7 +35,20 @@ services:
     volumes:
       - "./iot-devices:/app"
     depends_on:
-      - web
+      - frontend
+      - agent
+  sensors:
+    environment:
+      - FLASK_APP=sensors.py
+      - FLASK_DEBUG=1
+    build: ./sensors
+    command: flask run --port=5002 --host=0.0.0.0
+    ports:
+      - "5002:5002"
+    volumes:
+      - "./sensors:/app"
+    depends_on:
+      - frontend
       - agent
   db:
     image: postgres:11-alpine
