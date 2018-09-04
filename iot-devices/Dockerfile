@@ -2,7 +2,6 @@ FROM arm64v8/python:3.7.0-alpine3.8
 
 RUN apk add build-base eudev-dev openzwave openzwave-dev cython
 COPY requirements.txt /app/requirements.txt
-COPY run.sh /app/run.sh
 WORKDIR /app
 RUN pip install -r requirements.txt
 RUN pip install python_openzwave --no-deps --no-cache-dir --install-option="--flavor=shared"
