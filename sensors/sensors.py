@@ -35,3 +35,10 @@ def add_sensor():
 def get_sensors():
     return jsonify({'sensor_count': len(sensors),
                     'system_status': sensors})
+
+@app.route('/refresh_sensors')
+def refresh_sensors():
+    for sensor in sensors:
+        sensor['value'] = random.randint(1,100)
+    return jsonify({'sensor_count': len(sensors),
+                    'system_status': sensors})

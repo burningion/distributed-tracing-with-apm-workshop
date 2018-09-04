@@ -21,3 +21,9 @@ traced_app = TraceMiddleware(app, tracer, service='thinker-api')
 @app.route('/')
 def hello():
     return Response({'Hello from the API': 'world'}, mimetype='application/json')
+
+@app.route('/status')
+def status():
+    status = requests.get('http://sensors:5002/get_sensors').json()
+    lights = requests.get('http://internetthing:5001/get_devices').json()
+    return jsonify({'sensor_status': status, 'pump_status': lights})

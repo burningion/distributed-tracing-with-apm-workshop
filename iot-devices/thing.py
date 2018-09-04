@@ -20,6 +20,15 @@ config.requests['distributed_tracing'] = True
 app = Flask('thing')
 traced_app = TraceMiddleware(app, tracer, service='edge-thing')
 
+iot_devices = [{'pump_no': 1, 'status': 'OFF'},
+                {'pump_no': 2, 'status': 'OFF'},
+                {'pump_no': 3, 'status': 'OFF'}]
+
 @app.route('/')
 def hello():
     return Response({'Hello from IoT Device': 'world'}, mimetype='application/json')
+
+@app.route('/get_devices')
+def status():
+    return jsonify({'pump_count': len(iot_devices),
+                    'status': iot_devices})
