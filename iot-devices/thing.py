@@ -28,13 +28,13 @@ iot_devices = [{'pump_no': 1, 'status': 'OFF'},
 def hello():
     return Response({'Hello from IoT Device': 'world'}, mimetype='application/json')
 
-@app.route('/devices', methods=['GET', 'PUT'])
+@app.route('/devices', methods=['GET', 'POST'])
 def status():
     global iot_devices
     if flask_request.method == 'GET':
         return jsonify({'pump_count': len(iot_devices),
                         'status': iot_devices})
-    elif flask_request.method == 'PUT':
+    elif flask_request.method == 'POST':
         # create a new device w/ random status
         iot_devices.append({'pump_no': len(iot_devices) + 1, 
                             'status': random.choice(['OFF', 'ON'])})

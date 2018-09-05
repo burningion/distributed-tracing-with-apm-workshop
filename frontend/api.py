@@ -27,3 +27,8 @@ def status():
     status = requests.get('http://sensors:5002/sensors').json()
     lights = requests.get('http://internetthing:5001/devices').json()
     return jsonify({'sensor_status': status, 'pump_status': lights})
+
+@app.route('/add_sensor')
+def add_sensor():
+    sensors = requests.post('http://sensors:5002/sensors').json()
+    return jsonify({'sensors': sensors})
