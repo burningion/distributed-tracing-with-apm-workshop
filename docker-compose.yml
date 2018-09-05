@@ -26,7 +26,7 @@ services:
       - db
   noder:
     build: ./node-api
-    command: npm start
+    command: nodemon server.js
     ports:
       - "5003:5003"
     volumes:
