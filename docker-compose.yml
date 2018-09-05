@@ -24,6 +24,17 @@ services:
     depends_on:
       - agent
       - db
+  noder:
+    build: ./node-api
+    command: npm start
+    ports:
+      - "5003:5003"
+    volumes:
+      - "./node-api:/app"
+    depends_on:
+      - agent
+      - db
+      - frontend
   internetthing:
     environment:
       - FLASK_APP=thing.py

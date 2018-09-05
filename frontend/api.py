@@ -1,6 +1,6 @@
 import requests
 
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, render_template
 from flask import request as flask_request
 
 from ddtrace import tracer, patch, config
@@ -20,7 +20,8 @@ traced_app = TraceMiddleware(app, tracer, service='thinker-api')
 
 @app.route('/')
 def hello():
-    return Response({'Hello from the API': 'world'}, mimetype='application/json')
+    sensors = requests.get('http://sensors:5002/sensors').json()
+    return render_template('index.html', sensors=sensors)
 
 @app.route('/status')
 def status():

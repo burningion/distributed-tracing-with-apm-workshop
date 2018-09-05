@@ -1,0 +1,13 @@
+{
+  "name": "IoT-Example",
+  "version": "1.0.0",
+  "description": "Node.js and websocket updates",
+  "author": "Kirk Kaiser <kirk.kaiser@datadoghq.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

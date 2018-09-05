@@ -1,3 +1,4 @@
 tracenv/
 *.pyc
 iot-devices/raspenv
+node-api/node_modules
