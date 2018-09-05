@@ -16,7 +16,7 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = Flask('api')
-traced_app = TraceMiddleware(app, tracer, service='thinker-api')
+traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')
 def hello():
@@ -27,7 +27,8 @@ def hello():
 def status():
     status = requests.get('http://sensors:5002/sensors').json()
     lights = requests.get('http://internetthing:5001/devices').json()
-    return jsonify({'sensor_status': status, 'pump_status': lights})
+    users = requests.get('http://noder:5003/users').json()
+    return jsonify({'sensor_status': status, 'pump_status': lights, **users})
 
 @app.route('/add_sensor')
 def add_sensor():

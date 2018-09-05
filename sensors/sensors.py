@@ -19,7 +19,7 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = Flask('sensors')
-traced_app = TraceMiddleware(app, tracer, service='edge-thing')
+traced_app = TraceMiddleware(app, tracer, service='edge-thing', distributed_tracing=True)
 
 @app.route('/')
 def hello():
