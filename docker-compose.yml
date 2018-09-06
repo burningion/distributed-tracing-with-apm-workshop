@@ -5,6 +5,9 @@ services:
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
+      # Add DD_APM_ANALYZED_SPANS to the Agent container environment.
+      # Compatible with version 12.6.5250 or above.
+      - DD_APM_ANALYZED_SPANS=iot-example-js|express.request=1,edge-thing|flask.request=1,edge-device|flask.request=1,iot-frontend|flask.request=1
     ports:
       - "8126:8126"
     volumes:

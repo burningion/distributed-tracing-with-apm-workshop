@@ -18,7 +18,7 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = Flask('thing')
-traced_app = TraceMiddleware(app, tracer, service='edge-thing', distributed_tracing=True)
+traced_app = TraceMiddleware(app, tracer, service='edge-device', distributed_tracing=True)
 
 iot_devices = [{'pump_no': 1, 'status': 'OFF'},
                 {'pump_no': 2, 'status': 'OFF'},

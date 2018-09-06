@@ -1,5 +1,5 @@
 {
-  "name": "IoT-Example",
+  "name": "IoT-Example-JS",
   "version": "1.0.0",
   "description": "Node.js and websocket updates",
   "author": "Kirk Kaiser <kirk.kaiser@datadoghq.com>",

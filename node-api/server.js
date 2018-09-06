@@ -6,7 +6,13 @@ app.get('/', (req, res) => {
     res.send({'hello': 'world'})
 })
 
-app.get('/users', (req, res) => {
+app.get('/users', async (req, res) => {
+    await res.send({'users': [{'name': 'user1', 'id': 1},
+                        {'name': 'user2', 'id': 2},
+                        {'name': 'user3', 'id': 3}]})
+})
+
+app.get('/users-alt', (req, res) => {
     res.send({'users': [{'name': 'user1', 'id': 1},
                         {'name': 'user2', 'id': 2},
                         {'name': 'user3', 'id': 3}]})
