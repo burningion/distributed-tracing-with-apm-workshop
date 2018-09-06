@@ -6,6 +6,9 @@ from flask import request as flask_request
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
 
+from bootstrap import create_app
+from models import Network, Sensor
+
 import random
 
 sensors = []
@@ -18,7 +21,7 @@ patch(requests=True)
 # to send headers (globally)
 config.requests['distributed_tracing'] = True
 
-app = Flask('sensors')
+app = create_app()
 traced_app = TraceMiddleware(app, tracer, service='edge-thing', distributed_tracing=True)
 
 @app.route('/')
@@ -37,6 +40,10 @@ def get_sensors():
         err = jsonify({'error': 'Invalid request method'})
         err.status_code = 405
         return err
+
+@app.route('/sensors/<id>/')
+def sensor(id):
+    return jsonify(Sensor.query.get(id).serialize())
 
 @app.route('/refresh_sensors')
 def refresh_sensors():
