@@ -21,14 +21,18 @@ class Sensor(db.Model):
             'id': self.id,
             'name': self.name,
             'value': self.value,
-            'added': self.added
+            'added': self.added,
+            'site': self.network.site
         }
 
 class Network(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
+    site = db.Column(db.String(50))
+
     sensors = db.relationship('Sensor', backref='network', lazy=True)
 
-    def __init__(self, name):
+    def __init__(self, name, site):
         self.name = name
+        self.site = site
     

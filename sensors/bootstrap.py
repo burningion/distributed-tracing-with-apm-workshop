@@ -30,11 +30,11 @@ def initialize_database(app, db):
     with app.app_context():
         db.drop_all()
         db.create_all()
-        first_network = Network(name='First Network')
+        first_network = Network(name='First Network', site='DEL18DT')
         first_network.sensors.extend([Sensor(name='Bulkhead 5 Water Level', value=50),
                                     Sensor(name='Bulkhead 7 Water Level', value=20),
                                     Sensor(name='Bulkhead 2 Water Level', value=40)])
-        second_network = Network(name='Second Network')
+        second_network = Network(name='Second Network', site='DEL23DT')
         second_network.sensors.extend([Sensor(name='Rain Sensor Front Level', value=250),
                                     Sensor(name='Rain  Sensor Back Level', value=620)])
         db.session.add(first_network)
