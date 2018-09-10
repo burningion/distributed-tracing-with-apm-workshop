@@ -7,15 +7,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', async (req, res) => {
-    await res.send({'users': [{'name': 'user1', 'id': 1},
-                        {'name': 'user2', 'id': 2},
-                        {'name': 'user3', 'id': 3}]})
+    await res.send({'users': [{'name': 'City of Dorondo', 'id': 1, 'demand_gph': 100},
+                    {'name': 'Cortland County', 'id': 2, 'demand_gph': 200},
+                    {'name': 'C3 Energy', 'id': 3, 'demand_gph': 4000}]})
 })
 
 app.get('/users-alt', (req, res) => {
-    res.send({'users': [{'name': 'user1', 'id': 1},
-                        {'name': 'user2', 'id': 2},
-                        {'name': 'user3', 'id': 3}]})
+    res.send({'users': [{'name': 'City of Dorondo', 'id': 1, 'demand_gph': 100},
+                        {'name': 'Cortland County', 'id': 2, 'demand_gph': 200},
+                        {'name': 'C3 Energy', 'id': 3, 'demand_gph': 4000}]})
 })
 
-app.listen(5003, () => console.log('Example app listening on port 5003!'))
+app.listen(5003, () => console.log('User demand API listening on port 5003!'))
