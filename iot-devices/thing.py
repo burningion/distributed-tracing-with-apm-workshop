@@ -18,7 +18,7 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = Flask('thing')
-traced_app = TraceMiddleware(app, tracer, service='edge-device', distributed_tracing=True)
+traced_app = TraceMiddleware(app, tracer, service='pumps-service', distributed_tracing=True)
 
 iot_devices = [{'pump_no': 1, 'status': 'OFF'},
                 {'pump_no': 2, 'status': 'OFF'},
@@ -26,7 +26,7 @@ iot_devices = [{'pump_no': 1, 'status': 'OFF'},
 
 @app.route('/')
 def hello():
-    return Response({'Hello from IoT Device': 'world'}, mimetype='application/json')
+    return Response({'Hello from Oxygenation Pumps': 'world'}, mimetype='application/json')
 
 @app.route('/devices', methods=['GET', 'POST'])
 def status():
