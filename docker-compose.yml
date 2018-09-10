@@ -41,6 +41,8 @@ services:
       - agent
       - db
       - frontend
+    environment:
+      - DD_ENV=dev
   internetthing:
     environment:
       - FLASK_APP=thing.py
