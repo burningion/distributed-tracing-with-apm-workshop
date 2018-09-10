@@ -10,6 +10,7 @@ services:
       - DD_APM_ANALYZED_SPANS=iot-example-js|express.request=1,edge-thing|flask.request=1,edge-device|flask.request=1,iot-frontend|flask.request=1
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_TAGS='env:dev'
     ports:
       - "8126:8126"
     volumes:
