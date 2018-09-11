@@ -1,6 +1,7 @@
 const tracer = require('dd-trace').init({hostname:'agent'})
 const express = require('express')
 const redis = require('redis')
+const {promisify} = require('util')
 
 const client = redis.createClient(6379, 'redis')
 
@@ -12,18 +13,35 @@ client.on('error', (err) => {
     console.log('Couldn\'t connect to redis: ' + err)
 })
 
-const users = [{'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-426655440000', 'demand_gph': 100},
-                {'name': 'Cortland County', 'uid': '223e4567-e89b-12d3-a456-625655440000', 'demand_gph': 200},
-                {'name': 'C3 Energy', 'uid': '333e4567-c89b-12d3-a456-785655440000', 'demand_gph': 4000}]
+const existsAsync = promisify(client.exists).bind(client)
+const hgetallAsync = promisify(client.hgetall).bind(client)
+const hmsetAsync = promisify(client.hmset).bind(client)
 
+const users = [{'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-426655440000', 'demand_gph': 110},
+                {'name': 'Cortland County', 'uid': '223e4567-e89b-12d3-a456-625655440000', 'demand_gph': 210},
+                {'name': 'C3 Energy', 'uid': '333e4567-c89b-12d3-a456-785655440000', 'demand_gph': 5000}]
 
-for (var user of users) {
-    client.hmset(user.uid, 'name', user.name, 'demand_gph', user.demand_gph)
+async function addUsers() {
+    for (var user of users) {
+        // only write user ids if users don't exist
+        const exists = await existsAsync(user.uid)
+        if (exists == 1) {
+            console.log('skipping ' + user.uid + ' as it exists')
+        }
+        else {
+            console.log('creating ' + user.uid)
+            const created = await hmsetAsync(user.uid, {
+                'name': user.name,
+                'demand_gph': user.demand_gph
+            }) 
+            console.log(created)
+        }
+    }
 }
 
+addUsers()
+
 const app = express()
-
-
 
 app.get('/', (req, res) => {
     res.send({'Hello from Water Usage': 'World!'})
