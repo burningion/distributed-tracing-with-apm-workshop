@@ -39,8 +39,8 @@ services:
       - "./node-api:/app"
     depends_on:
       - agent
-      - db
       - frontend
+      - redis
     environment:
       - DD_ENV=dev
   internetthing:
@@ -56,6 +56,8 @@ services:
     depends_on:
       - frontend
       - agent
+  redis:
+    image: "redis:5.0-rc4-alpine"
   sensors:
     environment:
       - FLASK_APP=sensors.py
