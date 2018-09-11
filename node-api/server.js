@@ -16,6 +16,7 @@ client.on('error', (err) => {
 const existsAsync = promisify(client.exists).bind(client)
 const hgetallAsync = promisify(client.hgetall).bind(client)
 const hmsetAsync = promisify(client.hmset).bind(client)
+const keysAsync = promisify(client.keys).bind(client)
 
 const users = [{'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-426655440000', 'demand_gph': 110},
                 {'name': 'Cortland County', 'uid': '223e4567-e89b-12d3-a456-625655440000', 'demand_gph': 210},
@@ -24,13 +25,14 @@ const users = [{'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-42665
 async function addUsers() {
     for (var user of users) {
         // only write user ids if users don't exist
-        const exists = await existsAsync(user.uid)
+        const exists = await existsAsync('user-' + user.uid)
         if (exists == 1) {
             console.log('skipping ' + user.uid + ' as it exists')
         }
         else {
             console.log('creating ' + user.uid)
-            const created = await hmsetAsync(user.uid, {
+            const created = await hmsetAsync('user-' + user.uid, {
+                'uid': user.uid,
                 'name': user.name,
                 'demand_gph': user.demand_gph
             }) 
@@ -48,18 +50,31 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', async (req, res) => {
-    await res.send(users)
-})
+    try {
+        const userKeys = await keysAsync('user-*')
+        var users = []
+    
+        for (var userKey in userKeys) {
+            user = await hgetallAsync(userKeys[userKey])
+            users.push(user)
+        }
 
-app.get('/users-alt', (req, res) => {
-    res.send(users)
+        await res.send(users)
+    } catch (e) {
+        res.send(500).end()
+    }
+
 })
 
 app.post('/users/:userId/:waterLevel(\\d+)', async (req, res) => {
     try {
         const waterLevel = parseInt(req.params.waterLevel)
         const userId = req.params.userId
-        await res.send({'name': 'City of Dorado', 'id': userId, 'demand_gph': waterLevel})    
+
+        const newStatus = await hmsetAsync('user-' + userId,
+                                           {'demand_gph': waterLevel})
+        const user = await hgetallAsync('user-'+ userId)
+        await res.send(user)    
     } catch (e) {
         res.status(500).end()
     }
