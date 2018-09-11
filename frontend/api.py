@@ -9,6 +9,7 @@ from ddtrace.contrib.flask import TraceMiddleware
 
 # Tracer configuration
 tracer.configure(hostname='agent')
+tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
 # enable distributed tracing for requests

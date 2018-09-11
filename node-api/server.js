@@ -1,4 +1,4 @@
-const tracer = require('dd-trace').init({hostname:'agent'})
+const tracer = require('dd-trace').init({hostname:'agent', service: 'users-api'})
 const express = require('express')
 const redis = require('redis')
 const {promisify} = require('util')

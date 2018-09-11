@@ -15,6 +15,7 @@ sensors = []
 
 # Tracer configuration
 tracer.configure(hostname='agent')
+tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
 # enable distributed tracing for requests
@@ -22,7 +23,7 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = create_app()
-traced_app = TraceMiddleware(app, tracer, service='edge-thing', distributed_tracing=True)
+traced_app = TraceMiddleware(app, tracer, service='sensors-api', distributed_tracing=True)
 
 @app.route('/')
 def hello():
