@@ -1,5 +1,7 @@
 # Distributed Tracing with APM Workshop
 
+![Water Sensor App](https://github.com/burningion/distributed-tracing-with-apm-workshop/raw/master/images/dashboard.png)
+
 This will be a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
 
 Specifically, this will add:
