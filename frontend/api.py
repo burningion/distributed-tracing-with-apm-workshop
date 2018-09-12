@@ -6,6 +6,7 @@ from flask import request as flask_request
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
 
+import subprocess
 
 # Tracer configuration
 tracer.configure(hostname='agent')
@@ -35,3 +36,9 @@ def status():
 def add_sensor():
     sensors = requests.post('http://sensors:5002/sensors').json()
     return jsonify({'sensors': sensors})
+    
+@app.route('/generate_requests')
+def call_generate_requests():
+    subprocess.check_output(['/app/traffic_generator.py'])
+    
+    return jsonify({'traffic': '10 requests'})
