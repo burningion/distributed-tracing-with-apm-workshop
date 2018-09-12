@@ -34,7 +34,7 @@ services:
     build: ./node-api
     command: nodemon server.js
     ports:
-      - "5003:5003"
+      - "5004:5004"
     volumes:
       - "./node-api:/app"
     depends_on:
