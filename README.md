@@ -1,7 +1,5 @@
 # Distributed Tracing with APM Workshop
 
-![Water Sensor App](https://github.com/burningion/distributed-tracing-with-apm-workshop/raw/master/images/dashboard.png)
-
 This will be a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
 
 Specifically, this will add:
@@ -19,6 +17,8 @@ In the meantime, unless otherwise noted, this repository is a work in progress.
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
 # Running the Application
+
+![Water Sensor App](https://github.com/burningion/distributed-tracing-with-apm-workshop/raw/master/images/dashboard.png)
 
 You'll need to have a Datadog account with APM and logging enabled. A free trial should work to play with.
 
