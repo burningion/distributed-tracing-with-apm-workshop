@@ -37,8 +37,8 @@ def add_sensor():
     sensors = requests.post('http://sensors:5002/sensors').json()
     return jsonify({'sensors': sensors})
     
-@app.route('/generate_requests')
-def call_generate_requests():
-    subprocess.check_output(['/app/traffic_generator.py'])
+@app.route('/generate_requests/<int:req>')
+def call_generate_requests(req):
+    subprocess.check_output(['/app/traffic_generator.py', str(req)])
     
-    return jsonify({'traffic': '10 requests'})
+    return jsonify({'traffic': str(req) + ' requests'})
