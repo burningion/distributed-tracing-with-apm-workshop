@@ -19,17 +19,15 @@ const styles = {
 };
 
 let id = 0;
-function createData(name, calories, fat, carbs, protein) {
+function createData(name, status, gph) {
   id += 1;
-  return { id, name, calories, fat, carbs, protein };
+  return {id, name, status, gph};
 }
 
 const data = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Pump 1', 'OFF', 4.0),
+  createData('Pump 2 ', 'OFF', 4.3),
+  createData('Pump 3', 'ON', 3.9),
 ];
 
 function SimpleTable(props) {
@@ -40,11 +38,9 @@ function SimpleTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell numeric>Calories</TableCell>
-            <TableCell numeric>Fat (g)</TableCell>
-            <TableCell numeric>Carbs (g)</TableCell>
-            <TableCell numeric>Protein (g)</TableCell>
+            <TableCell>Pump Name</TableCell>
+            <TableCell numeric>Pump Status</TableCell>
+            <TableCell numeric>Gallons Per Hour</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,10 +50,9 @@ function SimpleTable(props) {
                 <TableCell component="th" scope="row">
                   {n.name}
                 </TableCell>
-                <TableCell numeric>{n.calories}</TableCell>
-                <TableCell numeric>{n.fat}</TableCell>
-                <TableCell numeric>{n.carbs}</TableCell>
-                <TableCell numeric>{n.protein}</TableCell>
+                <TableCell numeric>{n.status}</TableCell>
+                <TableCell numeric>{n.gph}</TableCell>
+
               </TableRow>
             );
           })}
