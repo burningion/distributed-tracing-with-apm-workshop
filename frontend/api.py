@@ -39,6 +39,7 @@ def add_sensor():
     
 @app.route('/generate_requests/<int:req>')
 def call_generate_requests(req):
-    subprocess.check_output(['/app/traffic_generator.py', str(req)])
+    total = 100
+    subprocess.check_output(['/app/traffic_generator.py', str(req), str(total)])
     
-    return jsonify({'traffic': str(req) + ' requests'})
+    return jsonify({'traffic': str(req) + ' concurrent requests generated, ' + str(total)  + ' requests total.'})
