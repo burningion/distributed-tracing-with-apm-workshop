@@ -120,7 +120,39 @@ class Dashboard extends React.Component {
       this.setState({pumpStatus: response.data})
     })
   }
+  handleRequestConcurrent100 = (e) => {
+    e.preventDefault()
+    axios.post(rootURL + "/generate_requests", 
+              {'concurrent': 10,
+              'total': 100,
+              'url': 'http://noder:5004/users'},
+              {crossdomain: true}).then(response => {
+                alert(response.data.traffic)
+              })
+  }
 
+  handleRequestConcurrent200 = (e) => {
+    e.preventDefault()
+    axios.post(rootURL + "/generate_requests", 
+              {'concurrent': 20,
+              'total': 200,
+              'url': 'http://noder:5004/users'},
+              {crossdomain: true}).then(response => {
+                alert(response.data.traffic)
+              })
+  }
+
+  handleRequestConcurrent300 = (e) => {
+    e.preventDefault()
+    axios.post(rootURL + "/generate_requests", 
+              {'concurrent': 30,
+              'total': 300,
+              'url': 'http://noder:5004/users'},
+              {crossdomain: true}).then(response => {
+                alert(response.data.traffic)
+              })
+  }
+  
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -195,6 +227,19 @@ class Dashboard extends React.Component {
             <div className={classes.tableContainer}>
               <SimpleTable  pumps={this.state.pumpStatus}/>
             </div>
+            <Typography variant="display1" gutterBottom>
+              Generate Traffic
+            </Typography>
+            <p>
+            <Button size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent100}>
+                100 users @ 10 concurrent requests
+            </Button></p>
+            <p><Button size="large" variant="contained" color="primary" onClick={this.handleRequestConcurrent200}>
+                200 users @ 20 concurrent requests
+            </Button></p>
+            <p><Button size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent300}>
+                300 users @ 30 concurrent requests
+            </Button></p>
           </main>
         </div>
       </React.Fragment>
