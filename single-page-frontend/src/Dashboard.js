@@ -98,7 +98,7 @@ const styles = theme => ({
     marginLeft: -22,
   },
   tableContainer: {
-    height: 320,
+    
   },
 });
 
@@ -152,7 +152,7 @@ class Dashboard extends React.Component {
                 alert(response.data.traffic)
               })
   }
-  
+
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
