@@ -17,6 +17,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
+import Button from '@material-ui/core/Button';
 import axios from 'axios';
 
 const drawerWidth = 240;
@@ -97,13 +98,20 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
   state = {
-    open: true,
+    open: false,
     pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}]
   };
 
   componentDidMount = () => {
     axios.get("http://localhost:5000/status", { crossdomain: true }).then(response => {
       this.setState({pumpStatus: response.data.pump_status.status})
+    })
+  }
+
+  handleNewPump = (e) => {
+    e.preventDefault()
+    axios.post("http://localhost:5000/add_pump", {crossdomain: true}).then(response => {
+      this.setState({pumpStatus: response.data})
     })
   }
 
@@ -174,7 +182,9 @@ class Dashboard extends React.Component {
               <SimpleLineChart />
             </Typography>
             <Typography variant="display1" gutterBottom>
-              Pump Status
+              Pump Status <Button style={{float: 'right'}} variant="contained" color="primary" onClick={this.handleNewPump}>
+                Add Pump
+              </Button>
             </Typography>
             <div className={classes.tableContainer}>
               <SimpleTable  pumps={this.state.pumpStatus}/>

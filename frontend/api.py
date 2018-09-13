@@ -35,15 +35,20 @@ def hello():
 @app.route('/status')
 def status():
     status = requests.get('http://sensors:5002/sensors').json()
-    lights = requests.get('http://internetthing:5001/devices').json()
+    pumps = requests.get('http://internetthing:5001/devices').json()
     users = requests.get('http://noder:5004/users').json()
-    return jsonify({'sensor_status': status, 'pump_status': lights, 'users': users})
+    return jsonify({'sensor_status': status, 'pump_status': pumps, 'users': users})
 
 @app.route('/add_sensor')
 def add_sensor():
     sensors = requests.post('http://sensors:5002/sensors').json()
-    return jsonify({'sensors': sensors})
+    return jsonify(sensors)
     
+@app.route('/add_pump', methods=['POST'])
+def add_pump():
+    pumps = requests.post('http://internetthing:5001/devices').json()
+    return jsonify(pumps)
+
 @app.route('/generate_requests', methods=['POST'])
 def call_generate_requests():
     payload = flask_request.get_json()
