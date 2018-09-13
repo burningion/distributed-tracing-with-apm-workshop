@@ -22,6 +22,12 @@ import axios from 'axios';
 
 const drawerWidth = 240;
 
+var rootURL = ''
+
+if (process.env.NODE_ENV == 'development') {
+  rootURL='http://localhost:5000'
+}
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -103,14 +109,14 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount = () => {
-    axios.get("http://localhost:5000/status", { crossdomain: true }).then(response => {
+    axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
       this.setState({pumpStatus: response.data.pump_status.status})
     })
   }
 
   handleNewPump = (e) => {
     e.preventDefault()
-    axios.post("http://localhost:5000/add_pump", {crossdomain: true}).then(response => {
+    axios.post(rootURL + "/add_pump", {crossdomain: true}).then(response => {
       this.setState({pumpStatus: response.data})
     })
   }
