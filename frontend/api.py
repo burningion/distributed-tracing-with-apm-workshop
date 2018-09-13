@@ -44,9 +44,14 @@ def add_sensor():
     sensors = requests.post('http://sensors:5002/sensors').json()
     return jsonify({'sensors': sensors})
     
-@app.route('/generate_requests/<int:req>')
-def call_generate_requests(req):
-    total = 100
-    subprocess.check_output(['/app/traffic_generator.py', str(req), str(total)])
-    
-    return jsonify({'traffic': str(req) + ' concurrent requests generated, ' + str(total)  + ' requests total.'})
+@app.route('/generate_requests', methods=['POST'])
+def call_generate_requests():
+    payload = flask_request.get_json()
+    subprocess.check_output(['/app/traffic_generator.py',
+                             str(payload['concurrent']), 
+                             str(payload['total']),
+                             str(payload['url'])])
+
+    return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
+                               str(payload['total'])  + ' requests total.',
+                    'url': payload['url']})
