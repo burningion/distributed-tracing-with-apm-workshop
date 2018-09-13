@@ -3,6 +3,9 @@ import requests
 from flask import Flask, Response, jsonify, render_template
 from flask import request as flask_request
 
+from flask_cors import CORS
+import os
+
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
 
@@ -18,6 +21,10 @@ patch(requests=True)
 config.requests['distributed_tracing'] = True
 
 app = Flask('api')
+
+if os.environ['FLASK_DEBUG']:
+    CORS(app)
+
 traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')

@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
 
 const styles = {
   root: {
@@ -18,6 +19,9 @@ const styles = {
   },
 };
 
+axios.get("http://localhost:5000/status", { crossdomain: true }).then(response => {
+  console.log(response)
+})
 let id = 0;
 function createData(name, status, gph) {
   id += 1;
