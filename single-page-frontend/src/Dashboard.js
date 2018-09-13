@@ -17,6 +17,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -97,7 +98,14 @@ const styles = theme => ({
 class Dashboard extends React.Component {
   state = {
     open: true,
+    pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}]
   };
+
+  componentDidMount = () => {
+    axios.get("http://localhost:5000/status", { crossdomain: true }).then(response => {
+      this.setState({pumpStatus: response.data.pump_status.status})
+    })
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -169,7 +177,7 @@ class Dashboard extends React.Component {
               Pump Status
             </Typography>
             <div className={classes.tableContainer}>
-              <SimpleTable />
+              <SimpleTable  pumps={this.state.pumpStatus}/>
             </div>
           </main>
         </div>
@@ -179,7 +187,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Dashboard);

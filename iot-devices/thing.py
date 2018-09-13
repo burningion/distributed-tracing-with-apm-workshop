@@ -21,9 +21,9 @@ config.requests['distributed_tracing'] = True
 app = Flask('thing')
 traced_app = TraceMiddleware(app, tracer, service='pumps-service', distributed_tracing=True)
 
-iot_devices = [{'pump_no': 1, 'status': 'OFF'},
-                {'pump_no': 2, 'status': 'OFF'},
-                {'pump_no': 3, 'status': 'OFF'}]
+iot_devices = [{'id': 1, 'name': 'Pump 1', 'status': 'OFF', 'gph': 5.10},
+                {'id': 2, 'name': 'Pump 2', 'status': 'OFF', 'gph': 3002.10},
+                {'id': 3, 'name': 'Pump 3', 'status': 'ON', 'gph': 5242.10},]
 
 @app.route('/')
 def hello():
@@ -37,8 +37,10 @@ def status():
                         'status': iot_devices})
     elif flask_request.method == 'POST':
         # create a new device w/ random status
-        iot_devices.append({'pump_no': len(iot_devices) + 1, 
-                            'status': random.choice(['OFF', 'ON'])})
+        iot_devices.append({'id': len(iot_devices) + 1, 
+                            'name': 'Pump ' + str(len(iot_devices) + 1),
+                            'status': random.choice(['OFF', 'ON']),
+                            'gph': random.randint(10,500)})
         return jsonify(iot_devices)
     else:
         err = jsonify({'error': 'Invalid request method'})

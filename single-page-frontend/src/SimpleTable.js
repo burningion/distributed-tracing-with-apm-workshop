@@ -7,7 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import axios from 'axios';
 
 const styles = {
   root: {
@@ -19,24 +18,8 @@ const styles = {
   },
 };
 
-axios.get("http://localhost:5000/status", { crossdomain: true }).then(response => {
-  console.log(response)
-})
-let id = 0;
-function createData(name, status, gph) {
-  id += 1;
-  return {id, name, status, gph};
-}
-
-const data = [
-  createData('Pump 1', 'OFF', 4.0),
-  createData('Pump 2 ', 'OFF', 4.3),
-  createData('Pump 3', 'ON', 3.9),
-];
-
 function SimpleTable(props) {
-  const { classes } = props;
-
+  const { classes, pumps } = props
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -48,7 +31,7 @@ function SimpleTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(n => {
+          {pumps.map(n => {
             return (
               <TableRow key={n.id}>
                 <TableCell component="th" scope="row">
@@ -68,6 +51,7 @@ function SimpleTable(props) {
 
 SimpleTable.propTypes = {
   classes: PropTypes.object.isRequired,
+  pumps: PropTypes.array.isRequired,
 };
 
 export default withStyles(styles)(SimpleTable);
