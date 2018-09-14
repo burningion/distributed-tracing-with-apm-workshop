@@ -24,6 +24,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
+import { isNumber } from 'recharts/lib/util/DataUtils';
 
 
 const drawerWidth = 240;
@@ -135,7 +136,8 @@ class Dashboard extends React.Component {
   state = {
     open: false,
     pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}],
-    requests100open: false,
+    requestsOpen: false,
+    requestCount: 0,
     newUser: {'name': '', 'demand_gph': '', 'users': ''},
     userList: []
   };
@@ -153,38 +155,31 @@ class Dashboard extends React.Component {
       this.setState({pumpStatus: response.data})
     })
   }
-  handleRequestConcurrent100 = (e) => {
+  handleRequestConcurrent = (e) => {
     e.preventDefault()
-    console.log(this.state)
-    axios.post(rootURL + "/generate_requests", 
-              {'concurrent': 10,
-              'total': 100,
-              'url': 'http://noder:5004/users'},
-              {crossdomain: true}).then(response => {
-                this.setState({requests100open: true})
-              })
-  }
 
-  handleRequestConcurrent200 = (e) => {
-    e.preventDefault()
-    axios.post(rootURL + "/generate_requests", 
-              {'concurrent': 20,
-              'total': 200,
-              'url': 'http://noder:5004/users'},
-              {crossdomain: true}).then(response => {
-                alert(response.data.traffic)
-              })
-  }
-
-  handleRequestConcurrent300 = (e) => {
-    e.preventDefault()
-    axios.post(rootURL + "/generate_requests", 
-              {'concurrent': 30,
-              'total': 300,
-              'url': 'http://noder:5004/users'},
-              {crossdomain: true}).then(response => {
-                alert(response.data.traffic)
-              })
+    // have to do this because there's a gap in buttons :/
+    if (e.target.id) {
+      const concurrent = e.target.id / 10
+      const total = e.target.id
+      axios.post(rootURL + "/generate_requests", 
+      {'concurrent': concurrent,
+      'total': total,
+      'url': 'http://noder:5004/users'},
+      {crossdomain: true}).then(response => {
+        this.setState({requestsOpen: true, requestCount: total})
+      })
+    } else {
+      const concurrent = e.target.parentElement.id / 10
+      const total = e.target.parentElement.id
+      axios.post(rootURL + "/generate_requests", 
+      {'concurrent': concurrent,
+      'total': total,
+      'url': 'http://noder:5004/users'},
+      {crossdomain: true}).then(response => {
+        this.setState({requestsOpen: true, requestCount: total})
+      })
+    }
   }
 
   handleUserSubmit = (e) => {
@@ -202,12 +197,12 @@ class Dashboard extends React.Component {
     this.setState({newUser: newUserForm});
   }
 
-  handle100Close = (event, reason) => {
+  handleConcurrentClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    this.setState({ requests100open: false });
+    this.setState({ requestsOpen: false });
   }
 
   handleDrawerOpen = () => {
@@ -245,7 +240,7 @@ class Dashboard extends React.Component {
                 Dashboard
               </Typography>
               <IconButton color="inherit">
-                <Badge>
+                <Badge badgeContent={0}>
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
@@ -340,13 +335,13 @@ class Dashboard extends React.Component {
               Generate Traffic
             </Typography>
             <br />
-            <Button className={classes.trafficButton} size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent100}>
+            <Button id="100" className={classes.trafficButton} size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent}>
                 100 users @ 10 concurrent requests
             </Button>
-            <br /><Button className={classes.trafficButton} size="large" variant="contained" color="primary" onClick={this.handleRequestConcurrent200}>
+            <br /><Button id="200" className={classes.trafficButton} size="large" variant="contained" color="primary" onClick={this.handleRequestConcurrent}>
                 200 users @ 20 concurrent requests
             </Button>
-            <br /><Button className={classes.trafficButton} size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent300}>
+            <br /><Button id="300" className={classes.trafficButton} size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent}>
                 300 users @ 30 concurrent requests
             </Button>
           </Paper>
@@ -357,13 +352,13 @@ class Dashboard extends React.Component {
             vertical: 'bottom',
             horizontal: 'left',
           }}
-          open={this.state.requests100open}
+          open={this.state.requestsOpen}
           autoHideDuration={1000}
-          onClose={this.handle100Close}
+          onClose={this.handleConcurrentClose}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">100 users @ 10 concurrent requests generated</span>}
+          message={<span id="message-id">{ this.state.requestCount } requests created @ { this.state.requestCount / 10} concurrent requests. </span>}
           action={[
             <IconButton
               key="close"
