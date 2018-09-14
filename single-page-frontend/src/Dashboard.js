@@ -110,7 +110,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
     padding: theme.spacing.unit * 2,
-    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       marginTop: theme.spacing.unit * 6,
       marginBottom: theme.spacing.unit * 6,
       padding: theme.spacing.unit * 3,
@@ -127,6 +127,12 @@ const styles = theme => ({
       marginTop: theme.spacing.unit + 20,
       marginBottom: theme.spacing.unit + 20,
       width: 100,
+  },
+  trafficButton: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
   }
 });
 
@@ -266,7 +272,7 @@ class Dashboard extends React.Component {
             </div>
             <div className={classes.appBarSpacer} />
             
-            <Grid container direction="row" justify="center"
+            <Grid container direction="row" justify="space-around"
             alignItems="stretch"
             xs={24}>
             <Paper classNames={classes.paper}>
@@ -302,34 +308,36 @@ class Dashboard extends React.Component {
             />
             </Grid>
             <Grid item xs>
-            <Button size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.createUser}>
+            <Button style={{float: 'right' }} size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.createUser}>
                 Create User
             </Button>
             </Grid>
             </Paper>
-            </Grid>
-          <div className={classes.appBarSpacer} />
+            <Paper classNames={classes.paper}>
+                      <div className={classes.appBarSpacer} />
             <Typography variant="display1" gutterBottom>
               Generate Traffic
             </Typography>
-            <p>
-            <Button size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent100}>
+            <br />
+            <Button className={classes.trafficButton} size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent100}>
                 100 users @ 10 concurrent requests
-            </Button></p>
-            <p><Button size="large" variant="contained" color="primary" onClick={this.handleRequestConcurrent200}>
+            </Button>
+            <br /><Button className={classes.trafficButton} size="large" variant="contained" color="primary" onClick={this.handleRequestConcurrent200}>
                 200 users @ 20 concurrent requests
-            </Button></p>
-            <p><Button size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent300}>
+            </Button>
+            <br /><Button className={classes.trafficButton} size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent300}>
                 300 users @ 30 concurrent requests
-            </Button></p>
-          </main>
+            </Button>
+          </Paper>
+            </Grid>
+            </main>
           <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
           }}
           open={this.state.requests100open}
-          autoHideDuration={500}
+          autoHideDuration={1000}
           onClose={this.handle100Close}
           ContentProps={{
             'aria-describedby': 'message-id',
