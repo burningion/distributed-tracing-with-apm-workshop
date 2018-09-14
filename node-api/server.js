@@ -65,7 +65,7 @@ app.get('/users', async (req, res) => {
 
         await res.json(users)
     } catch (e) {
-        res.sendStatus(500).end()
+        res.sendStatus(500)
     }
 
 })
@@ -75,7 +75,7 @@ app.post('/users', async (req, res) => {
         console.log(req.body)
         return res.json(req.body)
     } catch (e) {
-        res.sendStatus(500).end()
+        res.sendStatus(500)
     }
 })
 
@@ -89,7 +89,7 @@ app.post('/users/:userId/concurrent-users/:userCount(\\d+)', async (req, res) =>
         const user = await hgetallAsync('user-'+ userId)
         await res.json(user)    
     } catch (e) {
-        res.sendStatus(500).end()
+        res.sendStatus(500)
     }
 })
 
@@ -103,7 +103,7 @@ app.post('/users/:userId/water-level/:waterLevel(\\d+)', async (req, res) => {
         const user = await hgetallAsync('user-'+ userId)
         await res.json(user)    
     } catch (e) {
-        res.sendStatus(500).end()
+        res.sendStatus(500)
     }
 })
 
