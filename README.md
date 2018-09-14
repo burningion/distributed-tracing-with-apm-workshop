@@ -28,12 +28,14 @@ $ POSTGRES_USER=postgres POSTGRES_PASSWORD=<pg password> DD_API_KEY=<api key> do
 
 You can then hit the API at `http://localhost:5000/status` and `http://localhost:5000/add_sensor` and look at your Datadog traces to see the distributed traces.
 
-For the frontend image above, you'll need to run the single-page-frontend app, outside of the Docker containers. (Also a WIP, **not** hooked up yet.) It's done via a:
+For the frontend image above, you'll need to run the single-page-frontend app, outside of the Docker containers. (Also a WIP, **not __totally__** hooked up yet.) It's done via a:
 
 ```bash
 $ npm install
 $ npm start
 ```
+
+The frontend will communicate with the front layer API, and display and visualize the rest of the system microservices status.
 
 # Ideas for Live Debugging via Tracing
 
