@@ -29,7 +29,7 @@ traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')
 def hello():
-    sensors = requests.get('http://sensors:5002/sensors').json()
+    #sensors = requests.get('http://sensors:5002/sensors').json()
     return render_template('index.html', sensors=sensors)
 
 @app.route('/status')
@@ -38,6 +38,16 @@ def status():
     pumps = requests.get('http://internetthing:5001/devices').json()
     users = requests.get('http://noder:5004/users').json()
     return jsonify({'sensor_status': status, 'pump_status': pumps, 'users': users})
+
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    if flask_request.method == 'POST':
+        newUser = flask_request.get_json()
+        userStatus = requests.post('http://noder:5004/users', json=newUser).json()
+        return jsonify(userStatus)
+    elif flask_request.method == 'GET':
+        users = requests.get('http://noder:5004/users').json()
+        return jsonify(users)
 
 @app.route('/add_sensor')
 def add_sensor():

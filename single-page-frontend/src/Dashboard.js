@@ -136,10 +136,12 @@ class Dashboard extends React.Component {
     open: false,
     pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}],
     requests100open: false,
-    newUser: {'name': '', 'demand_gph': 0, 'users': 0}
+    newUser: {'name': '', 'demand_gph': '', 'users': ''},
+    userList: []
   };
 
   componentDidMount = () => {
+    
     axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
       this.setState({pumpStatus: response.data.pump_status.status})
     })
@@ -153,6 +155,7 @@ class Dashboard extends React.Component {
   }
   handleRequestConcurrent100 = (e) => {
     e.preventDefault()
+    console.log(this.state)
     axios.post(rootURL + "/generate_requests", 
               {'concurrent': 10,
               'total': 100,
@@ -186,8 +189,17 @@ class Dashboard extends React.Component {
 
   handleUserSubmit = (e) => {
     e.preventDefault()
-    this.setState({newUser: {'name': '', 'demand_gph': 0, 'users': 0}})
+    axios.post(rootURL + '/users', this.state.newUser, {crossdomain: true}).then(response => {
+      console.log(response.data)
+    })
+    console.log(this.state.newUser)
     console.log('user submitted')
+  }
+
+  handleUserChange = (e) => {
+    let newUserForm = Object.assign({}, this.state.newUser)
+    newUserForm[e.target.id] = e.target.value
+    this.setState({newUser: newUserForm});
   }
 
   handle100Close = (event, reason) => {
@@ -290,6 +302,8 @@ class Dashboard extends React.Component {
               placeholder="Name"
               className={classes.textField}
               margin="normal"
+              value={this.state.newUser.name}
+              onChange={this.handleUserChange}
              />
              </Grid>
              <Grid item xs>
@@ -299,6 +313,8 @@ class Dashboard extends React.Component {
               placeholder="400"
               className={classes.textField}
               margin="normal"
+              value={this.state.newUser.demand_gph}
+              onChange={this.handleUserChange}
             />
             </Grid>
             <Grid item xs>
@@ -308,6 +324,8 @@ class Dashboard extends React.Component {
               placeholder="1000"
               className={classes.textField}
               margin="normal"
+              value={this.state.newUser.users}
+              onChange={this.handleUserChange}
             />
             </Grid>
             <Grid item xs>
