@@ -1,6 +1,7 @@
 const tracer = require('dd-trace').init({hostname:'agent', service: 'users-api'})
 const express = require('express')
 const bodyParser = require('body-parser')
+const uuid = require('uuid/v4')
 
 const redis = require('redis')
 const {promisify} = require('util')
@@ -72,9 +73,19 @@ app.get('/users', async (req, res) => {
 
 app.post('/users', async (req, res) => {
     try {
-        console.log(req.body)
-        return res.json(req.body)
+        const userKeys = await keysAsync('user-*')
+        const uid = uuid()
+        const newUser = {
+            'id': userKeys.length + 1,
+            'uid': uid,
+            'name': req.body.name,
+            'demand_gph': req.body.demand_gph,
+            'users': req.body.users
+        }
+        const created = await hmsetAsync('user-' + uid, newUser) 
+        return res.json({"user": newUser, "status": created})
     } catch (e) {
+        console.log(e)
         res.sendStatus(500)
     }
 })
