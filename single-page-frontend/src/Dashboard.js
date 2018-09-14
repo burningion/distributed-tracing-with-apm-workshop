@@ -287,14 +287,14 @@ class Dashboard extends React.Component {
             <Paper className={classes.paper}>
             <div className={classes.appBarSpacer} />
             <Typography align="center" variant="display1" gutterBottom>
-            Add User to Water System
+            Add City to Water System
             </Typography>
             <Grid item xs={12}>
             
             <TextField
               id="name"
-              label="User name"
-              placeholder="Name"
+              label="City name"
+              placeholder="City Name"
               className={classes.textField}
               margin="normal"
               value={this.state.newUser.name}
@@ -325,7 +325,7 @@ class Dashboard extends React.Component {
             </Grid>
             <Grid item xs>
             <Button style={{float: 'right' }} size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.handleUserSubmit}>
-                Create User
+                Create City
             </Button>
             </Grid>
             </Paper>
