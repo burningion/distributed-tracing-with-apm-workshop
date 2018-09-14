@@ -11,14 +11,20 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
+import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import CloseIcon from '@material-ui/icons/Close';
 import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
+
 
 const drawerWidth = 240;
 
@@ -100,12 +106,35 @@ const styles = theme => ({
   tableContainer: {
     
   },
+  paper: {
+    marginTop: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 2,
+    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+      marginTop: theme.spacing.unit * 6,
+      marginBottom: theme.spacing.unit * 6,
+      padding: theme.spacing.unit * 3,
+    },
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 400,
+  },
+  submitButton: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      marginTop: theme.spacing.unit + 20,
+      marginBottom: theme.spacing.unit + 20,
+      width: 100,
+  }
 });
 
 class Dashboard extends React.Component {
   state = {
     open: false,
-    pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}]
+    pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}],
+    requests100open: false,
   };
 
   componentDidMount = () => {
@@ -127,7 +156,7 @@ class Dashboard extends React.Component {
               'total': 100,
               'url': 'http://noder:5004/users'},
               {crossdomain: true}).then(response => {
-                alert(response.data.traffic)
+                this.setState({requests100open: true})
               })
   }
 
@@ -151,6 +180,14 @@ class Dashboard extends React.Component {
               {crossdomain: true}).then(response => {
                 alert(response.data.traffic)
               })
+  }
+
+  handle100Close = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ requests100open: false });
   }
 
   handleDrawerOpen = () => {
@@ -227,6 +264,51 @@ class Dashboard extends React.Component {
             <div className={classes.tableContainer}>
               <SimpleTable  pumps={this.state.pumpStatus}/>
             </div>
+            <div className={classes.appBarSpacer} />
+            
+            <Grid container direction="row" justify="center"
+            alignItems="stretch"
+            xs={24}>
+            <Paper classNames={classes.paper}>
+            <div className={classes.appBarSpacer} />
+            <Typography variant="display1" gutterBottom>
+            Add User to Water System
+            </Typography>
+            <Grid item xs={24}>
+            <TextField
+              id="name"
+              label="User name"
+              placeholder="Name"
+              className={classes.textField}
+              margin="normal"
+             />
+             </Grid>
+             <Grid item xs>
+            <TextField 
+              id="demand_gph"
+              label="Demand in GPH"
+              placeholder="400"
+              className={classes.textField}
+              margin="nomal"
+            />
+            </Grid>
+            <Grid item xs>
+            <TextField 
+              id="users"
+              label="Total Water Users"
+              placeholder="1000"
+              className={classes.textField}
+              margin="nomal"
+            />
+            </Grid>
+            <Grid item xs>
+            <Button size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.createUser}>
+                Create User
+            </Button>
+            </Grid>
+            </Paper>
+            </Grid>
+          <div className={classes.appBarSpacer} />
             <Typography variant="display1" gutterBottom>
               Generate Traffic
             </Typography>
@@ -241,6 +323,30 @@ class Dashboard extends React.Component {
                 300 users @ 30 concurrent requests
             </Button></p>
           </main>
+          <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.requests100open}
+          autoHideDuration={500}
+          onClose={this.handle100Close}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">100 users @ 10 concurrent requests generated</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={this.handle100Close}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
         </div>
       </React.Fragment>
     );
