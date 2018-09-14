@@ -8,6 +8,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "dd-trace": "^0.5.6",
     "express": "^4.16.3",
     "nodemon": "^1.18.4",

@@ -1,5 +1,7 @@
 const tracer = require('dd-trace').init({hostname:'agent', service: 'users-api'})
 const express = require('express')
+const bodyParser = require('body-parser')
+
 const redis = require('redis')
 const {promisify} = require('util')
 
@@ -18,9 +20,9 @@ const hgetallAsync = promisify(client.hgetall).bind(client)
 const hmsetAsync = promisify(client.hmset).bind(client)
 const keysAsync = promisify(client.keys).bind(client)
 
-const users = [{'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-426655440000', 'demand_gph': 110, 'users': 201},
-                {'name': 'Cortland County', 'uid': '223e4567-e89b-12d3-a456-625655440000', 'demand_gph': 210, 'users': 402},
-                {'name': 'C3 Energy', 'uid': '333e4567-c89b-12d3-a456-785655440000', 'demand_gph': 5000, 'users': 602}]
+const users = [{'id': 1, 'name': 'City of Dorondo', 'uid': '123e4567-e89b-12d3-a456-426655440000', 'demand_gph': 110, 'users': 201},
+                {'id': 2, 'name': 'Cortland County', 'uid': '223e4567-e89b-12d3-a456-625655440000', 'demand_gph': 210, 'users': 402},
+                {'id': 3, 'name': 'C3 Energy', 'uid': '333e4567-c89b-12d3-a456-785655440000', 'demand_gph': 5000, 'users': 602}]
 
 async function addUsers() {
     for (var user of users) {
@@ -45,9 +47,10 @@ async function addUsers() {
 addUsers()
 
 const app = express()
+app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-    res.send({'Hello from Water Usage': 'World!'})
+    res.json({'Hello from Water Usage': 'World!'})
 })
 
 app.get('/users', async (req, res) => {
@@ -60,11 +63,20 @@ app.get('/users', async (req, res) => {
             users.push(user)
         }
 
-        await res.send(users)
+        await res.json(users)
     } catch (e) {
-        res.send(500).end()
+        res.sendStatus(500).end()
     }
 
+})
+
+app.post('/users', async (req, res) => {
+    try {
+        console.log(req.body)
+        return res.json(req.body)
+    } catch (e) {
+        res.sendStatus(500).end()
+    }
 })
 
 app.post('/users/:userId/concurrent-users/:userCount(\\d+)', async (req, res) => {
@@ -75,9 +87,9 @@ app.post('/users/:userId/concurrent-users/:userCount(\\d+)', async (req, res) =>
         const newStatus = await hmsetAsync('user-' + userId,
                                            {'users': userCount})
         const user = await hgetallAsync('user-'+ userId)
-        await res.send(user)    
+        await res.json(user)    
     } catch (e) {
-        res.status(500).end()
+        res.sendStatus(500).end()
     }
 })
 
@@ -89,9 +101,9 @@ app.post('/users/:userId/water-level/:waterLevel(\\d+)', async (req, res) => {
         const newStatus = await hmsetAsync('user-' + userId,
                                            {'demand_gph': waterLevel})
         const user = await hgetallAsync('user-'+ userId)
-        await res.send(user)    
+        await res.json(user)    
     } catch (e) {
-        res.status(500).end()
+        res.sendStatus(500).end()
     }
 })
 
