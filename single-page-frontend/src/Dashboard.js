@@ -109,12 +109,7 @@ const styles = theme => ({
   paper: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    padding: theme.spacing.unit * 2,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      marginTop: theme.spacing.unit * 6,
-      marginBottom: theme.spacing.unit * 6,
-      padding: theme.spacing.unit * 3,
-    },
+    padding: theme.spacing.unit * 1.5,
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -141,6 +136,7 @@ class Dashboard extends React.Component {
     open: false,
     pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}],
     requests100open: false,
+    newUser: {'name': '', 'demand_gph': 0, 'users': 0}
   };
 
   componentDidMount = () => {
@@ -186,6 +182,12 @@ class Dashboard extends React.Component {
               {crossdomain: true}).then(response => {
                 alert(response.data.traffic)
               })
+  }
+
+  handleUserSubmit = (e) => {
+    e.preventDefault()
+    this.setState({newUser: {'name': '', 'demand_gph': 0, 'users': 0}})
+    console.log('user submitted')
   }
 
   handle100Close = (event, reason) => {
@@ -274,13 +276,14 @@ class Dashboard extends React.Component {
             
             <Grid container direction="row" justify="space-around"
             alignItems="stretch"
-            xs={24}>
-            <Paper classNames={classes.paper}>
+            >
+            <Paper className={classes.paper}>
             <div className={classes.appBarSpacer} />
-            <Typography variant="display1" gutterBottom>
+            <Typography align="center" variant="display1" gutterBottom>
             Add User to Water System
             </Typography>
-            <Grid item xs={24}>
+            <Grid item xs={12}>
+            
             <TextField
               id="name"
               label="User name"
@@ -295,7 +298,7 @@ class Dashboard extends React.Component {
               label="Demand in GPH"
               placeholder="400"
               className={classes.textField}
-              margin="nomal"
+              margin="normal"
             />
             </Grid>
             <Grid item xs>
@@ -304,18 +307,18 @@ class Dashboard extends React.Component {
               label="Total Water Users"
               placeholder="1000"
               className={classes.textField}
-              margin="nomal"
+              margin="normal"
             />
             </Grid>
             <Grid item xs>
-            <Button style={{float: 'right' }} size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.createUser}>
+            <Button style={{float: 'right' }} size="large" variant="contained" color="primary" className={classes.submitButton} onClick={this.handleUserSubmit}>
                 Create User
             </Button>
             </Grid>
             </Paper>
-            <Paper classNames={classes.paper}>
+            <Paper className={classes.paper}>
                       <div className={classes.appBarSpacer} />
-            <Typography variant="display1" gutterBottom>
+            <Typography align="center" variant="display1" gutterBottom>
               Generate Traffic
             </Typography>
             <br />
