@@ -29,8 +29,7 @@ traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')
 def hello():
-    #sensors = requests.get('http://sensors:5002/sensors').json()
-    return render_template('index.html', sensors=sensors)
+    return app.send_static_file('index.html')
 
 @app.route('/status')
 def status():
