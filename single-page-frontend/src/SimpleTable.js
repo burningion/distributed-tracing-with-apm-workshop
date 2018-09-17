@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
 
 const styles = {
   root: {
@@ -20,6 +21,11 @@ const styles = {
 
 function SimpleTable(props) {
   const { classes, pumps } = props
+
+  function handlePumpStatusSwitch(e) {
+    e.preventDefault()
+    console.log(e.target.id)
+  }
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -37,7 +43,7 @@ function SimpleTable(props) {
                 <TableCell component="th" scope="row">
                   {n.name}
                 </TableCell>
-                <TableCell numeric>{n.status}</TableCell>
+                <TableCell numeric><Switch id={n.id} checked={n.status == 'ON' ? 1: 0 } onClick={handlePumpStatusSwitch} disabled='true' color='primary' /></TableCell> {/*n.status*/}
                 <TableCell numeric>{n.gph}</TableCell>
 
               </TableRow>
