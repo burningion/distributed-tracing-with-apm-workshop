@@ -28,11 +28,15 @@ if os.environ['FLASK_DEBUG']:
 traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')
-def hello():
+def homepage():
     return app.send_static_file('index.html')
 
+@app.route('/service-worker.js')
+def service_worker_js():
+    return app.send_static_file('js/service-worker.js')
+
 @app.route('/status')
-def status():
+def system_status():
     status = requests.get('http://sensors:5002/sensors').json()
     pumps = requests.get('http://internetthing:5001/devices').json()
     users = requests.get('http://noder:5004/users').json()
