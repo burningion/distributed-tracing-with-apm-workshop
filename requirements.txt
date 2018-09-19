@@ -5,6 +5,7 @@ Cython
 ddtrace==0.13.1
 Flask==1.0.2
 Flask-Caching==1.4.0
+Flask-Cors==3.0.6
 Flask-SQLAlchemy==2.3.2
 idna==2.7
 itsdangerous==0.24
