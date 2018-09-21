@@ -67,14 +67,15 @@ def call_generate_requests():
     payload = flask_request.get_json()
     span = tracer.current_span()
     app.logger.info(f"Looking at {span}")
-    parent_id = 0
-    if span.parent_id:
-        parent_id = span.parent_id
+    app.logger.info(f"with span id {span.span_id}")
+    span = tracer.current_span()
+
+    span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
     subprocess.check_output(['/app/traffic_generator.py',
                              str(payload['concurrent']), 
                              str(payload['total']),
                              str(payload['url']),
-                             str(parent_id),
+                             str(span.span_id),
                              str(span.trace_id)])
 
     return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
