@@ -149,6 +149,7 @@ class Dashboard extends React.Component {
     axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
       console.log(response.data)
       this.setState({pumpStatus: response.data.pump_status.status})
+      this.setState({userStatus: response.data.users})
     })
   }
 
@@ -189,6 +190,9 @@ class Dashboard extends React.Component {
     e.preventDefault()
     axios.post(rootURL + '/users', this.state.newUser, {crossdomain: true}).then(response => {
       console.log(response.data)
+      axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
+        this.setState({userStatus: response.data.users})
+      })
     })
     console.log(this.state.newUser)
     console.log('user submitted')
@@ -342,7 +346,7 @@ class Dashboard extends React.Component {
             <Paper className={classes.paper}>
                       <div className={classes.appBarSpacer} />
             <Typography align="center" variant="display1" gutterBottom>
-              Generate Traffic
+              Generate API Traffic
             </Typography>
             <br />
             <Button id="100" className={classes.trafficButton} size="large" variant="contained" color="default" onClick={this.handleRequestConcurrent}>

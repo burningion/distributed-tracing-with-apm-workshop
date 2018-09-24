@@ -32,8 +32,12 @@ def hello():
 @app.route('/sensors', methods=['GET', 'POST'])
 def get_sensors():
     if flask_request.method == 'GET':
-        return jsonify({'sensor_count': len(sensors),
-                        'system_status': sensors})
+        sensors = Sensor.query.all()
+        system_status = []
+        for sensor in sensors:
+            system_status.append(sensor.serialize())
+        return jsonify({'sensor_count': len(system_status),
+                        'system_status': system_status})
     elif flask_request.method == 'POST':
         sensors.append({'sensor_no': len(sensors) + 1, 'value': random.randint(1,100)})
         return jsonify(sensors)

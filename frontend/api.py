@@ -38,6 +38,7 @@ def service_worker_js():
 @app.route('/status')
 def system_status():
     status = requests.get('http://sensors:5002/sensors').json()
+    app.logger.info(f"Sensor status: {status}")
     pumps = requests.get('http://internetthing:5001/devices').json()
     users = requests.get('http://noder:5004/users').json()
     return jsonify({'sensor_status': status, 'pump_status': pumps, 'users': users})
