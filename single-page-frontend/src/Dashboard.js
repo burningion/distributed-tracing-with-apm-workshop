@@ -19,6 +19,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
+import UsersTable from './UsersTable'
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -136,6 +137,7 @@ class Dashboard extends React.Component {
   state = {
     open: false,
     pumpStatus: [{'id': 1, 'name': 'Pump 1', 'status': 'ON', 'gph': 400}],
+    userStatus: [{'id': 1, 'uid': '42023-12024-4951A', 'name': 'Test City', 'demand_gph': 10, 'users': 200}],
     requestsOpen: false,
     requestCount: 0,
     newUser: {'name': '', 'demand_gph': '', 'users': ''},
@@ -145,6 +147,7 @@ class Dashboard extends React.Component {
   componentDidMount = () => {
     
     axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
+      console.log(response.data)
       this.setState({pumpStatus: response.data.pump_status.status})
     })
   }
@@ -278,6 +281,13 @@ class Dashboard extends React.Component {
             </Typography>
             <div className={classes.tableContainer}>
               <SimpleTable  pumps={this.state.pumpStatus}/>
+            </div>
+            <div className={classes.appBarSpacer} />
+            <Typography variant="display1" gutterBottom>
+            City Water Usage
+            </Typography>
+            <div className={classes.tableContainer}>
+              <UsersTable  users={this.state.userStatus}/>
             </div>
             <div className={classes.appBarSpacer} />
             
