@@ -26,16 +26,16 @@ You'll need to have a Datadog account with APM and logging enabled. A free trial
 $ POSTGRES_USER=postgres POSTGRES_PASSWORD=<pg password> DD_API_KEY=<api key> docker-compose up
 ```
 
-You can then hit the API at `http://localhost:5000/status` and `http://localhost:5000/add_sensor` and look at your Datadog traces to see the distributed traces.
+You can open the web app at `http://localhost:5000`, create some pumps, and look at your Datadog traces to see the distributed traces.
 
-For the frontend image above, you'll need to run the single-page-frontend app, outside of the Docker containers. (Also a WIP, **not __totally__** hooked up yet.) It's done via a:
+The frontend of the app is a React node app using [Material UI](https://material-ui.com/). It lives in the `single-page-frontend` folder. You can start it up for development with a:
 
 ```bash
 $ npm install
 $ npm start
 ```
 
-The frontend will communicate with the front layer API, and display and visualize the rest of the system microservices status.
+It should connect to the running frontend API container, allowing for easier development. When you're finished making changes, you can do a `npm build`, and then copy the javascript from the `build` subdirectory into the Flask frontend app.
 
 # Ideas for Live Debugging via Tracing
 
