@@ -74,9 +74,7 @@ def call_generate_requests():
     subprocess.check_output(['/app/traffic_generator.py',
                              str(payload['concurrent']), 
                              str(payload['total']),
-                             str(payload['url']),
-                             str(span.span_id),
-                             str(span.trace_id)])
+                             str(payload['url'])])
 
     return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
                                str(payload['total'])  + ' requests total.',
