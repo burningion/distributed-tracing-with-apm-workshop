@@ -61,6 +61,7 @@ def add_sensor():
 @app.route('/add_pump', methods=['POST'])
 def add_pump():
     pumps = requests.post('http://internetthing:5001/devices').json()
+    app.logger.info(f"Getting {pumps}")
     return jsonify(pumps)
 
 @app.route('/generate_requests', methods=['POST'])
