@@ -6,7 +6,7 @@ from flask import request as flask_request
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
 
-from bootstrap import create_app
+from bootstrap import create_app, db
 from models import Network, Sensor
 
 import random
@@ -52,7 +52,15 @@ def sensor(id):
 
 @app.route('/refresh_sensors')
 def refresh_sensors():
-    for sensor in sensors:
-        sensor['value'] = random.randint(1,100)
+    sensors = simulate_all_sensors()
     return jsonify({'sensor_count': len(sensors),
                     'system_status': sensors})
+
+@tracer.wrap(name='sensor-simulator')
+def simulate_all_sensors():
+    sensors = Sensor.query.all()
+    for sensor in sensors:
+        sensor.value = random.randint(1,100)
+    db.session.add_all(sensors)
+    db.session.commit()
+    return [s.serialize() for s in sensors]

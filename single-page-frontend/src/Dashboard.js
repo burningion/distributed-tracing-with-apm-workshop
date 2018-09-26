@@ -146,6 +146,13 @@ class Dashboard extends React.Component {
     userList: []
   };
 
+  pollForSensors = () => {
+    setTimeout(() => {
+      this.simulateSensorReads()
+      this.pollForSensors()
+    }, 3000)
+  }
+
   componentDidMount = () => {
     
     axios.get(rootURL + "/status", { crossdomain: true }).then(response => {
@@ -153,6 +160,18 @@ class Dashboard extends React.Component {
       this.setState({pumpStatus: response.data.pump_status.status})
       this.setState({userStatus: response.data.users})
       this.setState({sensorsStatus: response.data.sensor_status.system_status})
+    })
+
+    // if running in dev, poll for new fake data  
+    if (process.env.NODE_ENV == 'development') {
+      this.pollForSensors()
+    }
+  }
+
+  simulateSensorReads = () => {
+    axios.get(rootURL + "/simulate_sensors", {crossdomain: true}).then(response => {
+      //console.log(response.data)
+      this.setState({sensorsStatus: response.data.system_status})
     })
   }
 

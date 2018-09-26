@@ -81,3 +81,8 @@ def call_generate_requests():
     return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
                                str(payload['total'])  + ' requests total.',
                     'url': payload['url']})
+
+@app.route('/simulate_sensors')
+def simulate_sensors():
+    sensors = requests.get('http://sensors:5002/refresh_sensors').json()
+    return jsonify(sensors)
