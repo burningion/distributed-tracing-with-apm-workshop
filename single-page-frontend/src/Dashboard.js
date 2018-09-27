@@ -162,10 +162,7 @@ class Dashboard extends React.Component {
       this.setState({sensorsStatus: response.data.sensor_status.system_status})
     })
 
-    // if running in dev, poll for new fake data  
-    if (process.env.NODE_ENV == 'development') {
-      this.pollForSensors()
-    }
+    this.pollForSensors()
   }
 
   simulateSensorReads = () => {
