@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-from ddtrace import tracer, patch, config
+from ddtrace import tracer, patch, config, Pin
 tracer.configure(hostname='agent')
 patch(requests=True,futures=True,asyncio=True)
 
@@ -25,6 +25,7 @@ args = parser.parse_args()
 asyncio.set_event_loop(asyncio.new_event_loop())
 
 session = AsyncSession(n=args.concurrent)
+Pin.override(session, service='concurrent-requests-generator')
 
 async def generate_requests():
     with tracer.trace('flask.request', service='concurrent-requests-generator') as span:
