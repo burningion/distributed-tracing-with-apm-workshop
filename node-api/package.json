@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "dd-trace": "^0.5.6",
+    "dd-trace": "^0.6.0",
     "express": "^4.16.3",
     "nodemon": "^1.18.4",
     "redis": "^2.8.0",

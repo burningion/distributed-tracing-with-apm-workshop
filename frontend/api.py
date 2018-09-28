@@ -73,11 +73,12 @@ def call_generate_requests():
     span = tracer.current_span()
 
     span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
-    subprocess.check_output(['/app/traffic_generator.py',
-                             str(payload['concurrent']), 
-                             str(payload['total']),
-                             str(payload['url'])])
 
+    output = subprocess.check_output(['/app/traffic_generator.py',
+                                      str(payload['concurrent']), 
+                                      str(payload['total']),
+                                      str(payload['url'])])
+    app.logger.info(f"Result for subprocess call: {output}")
     return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
                                str(payload['total'])  + ' requests total.',
                     'url': payload['url']})
