@@ -1,7 +1,7 @@
 version: '3'
 services:
   agent:
-    image: "datadog/agent:6.4.2"
+    image: "datadog/agent:6.5.2"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
@@ -10,7 +10,7 @@ services:
       - DD_APM_ANALYZED_SPANS=users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
-      - DD_AC_EXCLUDE='name:dd-agent'
+      - DD_AC_EXCLUDE='image:agent'
       - DD_TAGS='env:dev'
     ports:
       - "8126:8126"
