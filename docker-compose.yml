@@ -18,6 +18,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "datadog-agent", "service": "agent"}]'
+
   frontend:
     environment:
       - FLASK_APP=api.py
@@ -31,6 +34,9 @@ services:
     depends_on:
       - agent
       - db
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "iot-frontend", "service": "iot-frontend"}}]'
+
   noder:
     build: ./node-api
     command: nodemon server.js
@@ -44,6 +50,9 @@ services:
       - redis
     environment:
       - DD_ENV=dev
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "noder", "service": "noder"}]'
+      
   pumps:
     environment:
       - FLASK_APP=thing.py
@@ -60,8 +69,13 @@ services:
       - frontend
       - agent
       - db
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "pumps-service", "service": "pumps-service"}]'
+
   redis:
     image: "redis:5.0-rc4-alpine"
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
   sensors:
     environment:
       - FLASK_APP=sensors.py
@@ -78,6 +92,9 @@ services:
       - frontend
       - agent
       - db
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "sensor-api"}]'
+
   db:
     image: postgres:11-alpine
     restart: always
@@ -86,6 +103,9 @@ services:
       - POSTGRES_USER
     ports:
       - 5432:5432
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "postgres", "service": "postgres"}]'
+
   adminer:
     image: adminer
     restart: always
