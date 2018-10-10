@@ -13,7 +13,7 @@ import subprocess
 
 # Tracer configuration
 tracer.configure(hostname='agent')
-tracer.set_tags({'env': 'dev'})
+tracer.set_tags({'env': 'workshop'})
 patch(requests=True)
 
 # enable distributed tracing for requests
@@ -61,7 +61,7 @@ def add_sensor():
 @app.route('/add_pump', methods=['POST'])
 def add_pump():
     pumps = requests.post('http://pumps:5001/devices').json()
-    app.logger.info(f"Getting {pumps}")
+    app.logger.info(f"Adding {pumps} to the pumps pool")
     return jsonify(pumps)
 
 @app.route('/generate_requests', methods=['POST'])

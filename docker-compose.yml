@@ -2,24 +2,25 @@ version: '3'
 services:
   agent:
     image: "datadog/agent:6.5.2"
+    container_name: "datadog-agent"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
       # Add DD_APM_ANALYZED_SPANS to the Agent container environment.
       # Compatible with version 12.6.5250 or above.
       - DD_APM_ANALYZED_SPANS=users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1
+      - DD_TAGS='env:workshop'
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
-      - DD_AC_EXCLUDE='image:agent'
-      - DD_TAGS='env:dev'
     ports:
       - "8126:8126"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
     labels:
-      com.datadoghq.ad.logs: '[{"source": "datadog-agent", "service": "agent"}]'
+      com.datadoghq.ad.logs: '[{"source": "docker", "service": "agent"}]'
 
   frontend:
     environment:
@@ -50,7 +51,7 @@ services:
       - frontend
       - redis
     environment:
-      - DD_ENV=dev
+      - DD_ENV=workshop
     labels:
       com.datadoghq.ad.logs: '[{"source": "noder", "service": "noder"}]'
       
@@ -74,9 +75,10 @@ services:
       com.datadoghq.ad.logs: '[{"source": "pumps-service", "service": "pumps-service"}]'
 
   redis:
-    image: "redis:5.0-rc4-alpine"
+    image: redis:latest
     labels:
       com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
+
   sensors:
     environment:
       - FLASK_APP=sensors.py
@@ -94,7 +96,7 @@ services:
       - agent
       - db
     labels:
-      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "sensor-api"}]'
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "sensors-api"}]'
 
   db:
     image: postgres:11-alpine
@@ -112,4 +114,5 @@ services:
     restart: always
     ports:
       - 8080:8080
-    
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "adminer", "service": "adminer"}]' 
