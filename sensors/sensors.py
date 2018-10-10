@@ -15,7 +15,7 @@ sensors = []
 
 # Tracer configuration
 tracer.configure(hostname='agent')
-tracer.set_tags({'env': 'dev'})
+tracer.set_tags({'env': 'workshop'})
 patch(requests=True)
 
 # enable distributed tracing for requests

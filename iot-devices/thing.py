@@ -14,7 +14,7 @@ import random
 
 # Tracer configuration
 tracer.configure(hostname='agent')
-tracer.set_tags({'env': 'dev'})
+tracer.set_tags({'env': 'workshop'})
 patch(requests=True)
 
 # enable distributed tracing for requests
@@ -34,9 +34,9 @@ def hello():
 def status():
     if flask_request.method == 'GET':
         pumps = Pump.query.all()
-        app.logger.info(f"Pumps available: {pumps}")
         pump_obj = {'pump_count': len(pumps),
                     'status': []}
+        app.logger.info(f"Available pumps {pumps}")
         for pump in pumps:
             pump_obj['status'].append(pump.serialize())
         return jsonify(pump_obj)
@@ -47,6 +47,8 @@ def status():
                         random.choice(['OFF', 'ON']),
                         random.randint(10,500))
         app.logger.info(f"Adding pump {new_pump}")
+        app.logger.info(f"pump count is {pumps_count}")
+        app.logger.info(f"new_pump is {new_pump}")
         db.session.add(new_pump)
         db.session.commit()
         pumps = Pump.query.all()
