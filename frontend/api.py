@@ -8,12 +8,13 @@ import os
 
 from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
+from ddtrace.ext.priority import USER_REJECT, USER_KEEP
 
 import subprocess
 import random
 
 # Tracer configuration
-tracer.configure(hostname='agent')
+tracer.configure(hostname='agent', priority_sampling=True)
 tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
@@ -85,12 +86,15 @@ def call_generate_requests():
                     'url': payload['url']})
 
 # generate requests for one user to see tagged
+# enable user sampling because low request count
 @app.route('/generate_requests_user')
 def call_generate_requests_user():
     users = requests.get('http://noder:5004/users').json()
     user = random.choice(users)
     span = tracer.current_span()
-    span.set_tags({'current_user': user['uid']})
+    span.context.sampling_priority = USER_KEEP
+    span.set_tags({'user_id': user['id']})
+
     output = subprocess.check_output(['/app/traffic_generator.py',
                                      '20',
                                      '100',

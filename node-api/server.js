@@ -35,6 +35,7 @@ async function addUsers() {
         else {
             console.log('creating ' + user.uid)
             const created = await hmsetAsync('user-' + user.uid, {
+                'id': user.id,
                 'uid': user.uid,
                 'name': user.name,
                 'demand_gph': user.demand_gph,
@@ -94,9 +95,6 @@ app.get('/users/:userId/', async (req, res) => {
     try {
         const userId = req.params.userId
         const user = await hgetallAsync('user-' + userId)
-        const scope = tracer.scopeManager().active()
-        const span = scope.span()
-        span.setTag('current_user', userId)
         return res.json(user)
     } catch (e) {
         res.sendStatus(500)
