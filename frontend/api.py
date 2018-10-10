@@ -10,6 +10,7 @@ from ddtrace import tracer, patch, config
 from ddtrace.contrib.flask import TraceMiddleware
 
 import subprocess
+import random
 
 # Tracer configuration
 tracer.configure(hostname='agent')
@@ -82,6 +83,20 @@ def call_generate_requests():
     return jsonify({'traffic': str(payload['concurrent']) + ' concurrent requests generated, ' + 
                                str(payload['total'])  + ' requests total.',
                     'url': payload['url']})
+
+# generate requests for one user to see tagged
+@app.route('/generate_requests_user')
+def call_generate_requests_user():
+    users = requests.get('http://noder:5004/users').json()
+    user = random.choice(users)
+    span = tracer.current_span()
+    span.set_tags({'current_user': user['uid']})
+    output = subprocess.check_output(['/app/traffic_generator.py',
+                                     '20',
+                                     '100',
+                                     'http://noder:5004/users/' + user['uid']])
+    app.logger.info(f"Chose random user {user['name']} for requests: {output}")
+    return jsonify({'random_user': user['name']})
 
 @app.route('/simulate_sensors')
 def simulate_sensors():
