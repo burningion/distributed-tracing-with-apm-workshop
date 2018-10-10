@@ -25,6 +25,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import purple from '@material-ui/core/colors/purple';
 import axios from 'axios';
 import { isNumber } from 'recharts/lib/util/DataUtils';
 
@@ -205,6 +206,14 @@ class Dashboard extends React.Component {
     }
   }
 
+  handleUserRequestConcurrent = (e) => {
+    e.preventDefault()
+    axios.get(rootURL + "/generate_requests_user",
+      {crossdomain: true}).then(response => {
+        this.setState({requestsOpen: true, requestCount: 100})
+    })
+  }
+
   handleUserSubmit = (e) => {
     e.preventDefault()
     axios.post(rootURL + '/users', this.state.newUser, {crossdomain: true}).then(response => {
@@ -383,6 +392,9 @@ class Dashboard extends React.Component {
             </Button>
             <br /><Button id="300" className={classes.trafficButton} size="large" variant="contained" color="secondary" onClick={this.handleRequestConcurrent}>
                 300 users @ 30 concurrent requests
+            </Button>
+            <br /><Button id="100" style={{backgroundColor: purple[500]}} className={classes.trafficButton} size="large" variant="contained" color="secondary" onClick={this.handleUserRequestConcurrent}>
+                Generate Requests for Random User
             </Button>
           </Paper>
             </Grid>
