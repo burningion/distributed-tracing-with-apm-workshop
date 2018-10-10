@@ -90,6 +90,19 @@ app.post('/users', async (req, res) => {
     }
 })
 
+app.get('/users/:userId/', async (req, res) => {
+    try {
+        const userId = req.params.userId
+        const user = await hgetallAsync('user-' + userId)
+        const scope = tracer.scopeManager().active()
+        const span = scope.span()
+        span.setTag('current_user', userId)
+        return res.json(user)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
 app.post('/users/:userId/concurrent-users/:userCount(\\d+)', async (req, res) => {
     try {
         const userCount = parseInt(req.params.userCount)
