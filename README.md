@@ -26,7 +26,9 @@ Please ensure you accomplish at least steps 1 and 2 before the event, so everyon
 
 2. Pull Docker images to your local machine *before the event*, so we don't all overwhelm the WiFi. 
 
-You can do this by cloning this repo, and running a `docker-compose up` in the top level directory. This will pull the images and libraries to your local computer. This will take a few minutes.
+You can do this by cloning this repo, and running a `docker-compose up` in the top level directory. This will pull the images and libraries to your local computer. This will take a few minutes. 
+
+When it finishes, you'll be able to load http://localhost:5000, and see some example data. Refresh until you see 3 pumps listed. This means the downstream microservice containers have come up too.
 
 3. (Optional) The workshop itself is written in a [Jupyter notebook](http://jupyter.org/), allowing you to mix and edit content locally. 
 
