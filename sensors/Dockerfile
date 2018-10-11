@@ -1,4 +1,6 @@
-FROM arm64v8/python:3.7.0-alpine3.8
+# uncomment below for arm container (runs on macos w/ no issues)
+#FROM arm64v8/python:3.7.0-alpine3.8
+FROM python:3.7.0-alpine3.8
 
 RUN apk add build-base eudev-dev openzwave openzwave-dev cython postgresql-dev
 COPY requirements.txt /app/requirements.txt
