@@ -16,6 +16,24 @@ In the meantime, unless otherwise noted, this repository is a work in progress.
 
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
+# Before the Workshop / Prerequisites
+
+The workshop is scheduled for an hour and a half. In this short time frame, having prerequisites installed is crucial to maximize everyone's hands on time.
+
+Please ensure you accomplish at least steps 1 and 2 before the event, so everyone has a chance to complete the event.
+
+1. Install [Docker CE](https://store.docker.com/search?type=edition&offering=community), allowing us to use Docker and Docker Compose. Please note you will be required to create an account in order to download Docker CE. 
+
+2. Pull Docker images to your local machine *before the event*, so we don't all overwhelm the WiFi. 
+
+You can do this by cloning this repo, and running a `docker-compose up` in the top level directory. This will pull the images and libraries to your local computer. This will take a few minutes.
+
+3. (Optional) The workshop itself is written in a [Jupyter notebook](http://jupyter.org/), allowing you to mix and edit content locally. 
+
+If you want to be able to add notes and save them locally, you'll want to install Jupyter, and then open the `Distributed Tracing Workshop.ipynb` by doing a `jupyter-notebook` in the top level repo directory.
+
+This is completely optional, as Github has a built in viewer for Jupyter notebooks. You can view the repo's notebook [here](https://github.com/burningion/distributed-tracing-with-apm-workshop/blob/master/Distributed%20Tracing%20Workshop.ipynb).
+
 # Running the Application
 
 ![Water Sensor App](https://github.com/burningion/distributed-tracing-with-apm-workshop/raw/master/images/dashboard.png)
