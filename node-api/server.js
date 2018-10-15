@@ -65,7 +65,7 @@ app.get('/users', async (req, res) => {
             user = await hgetallAsync(userKeys[userKey])
             users.push(user)
         }
-
+        // await sleep(1000)
         await res.json(users)
     } catch (e) {
         res.sendStatus(500)
@@ -85,7 +85,7 @@ app.post('/users', async (req, res) => {
             'users': req.body.users
         }
         const created = await hmsetAsync('user-' + uid, newUser) 
-        // await sleep(1000)
+        
         return res.json({"user": newUser, "status": created})
     } catch (e) {
         console.log(e)
