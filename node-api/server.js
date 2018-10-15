@@ -2,6 +2,7 @@ const tracer = require('dd-trace').init({hostname:'agent', service: 'users-api'}
 const express = require('express')
 const bodyParser = require('body-parser')
 const uuid = require('uuid/v4')
+const sleep = require('sleep-promise')
 
 const redis = require('redis')
 const {promisify} = require('util')
@@ -84,6 +85,7 @@ app.post('/users', async (req, res) => {
             'users': req.body.users
         }
         const created = await hmsetAsync('user-' + uid, newUser) 
+        // await sleep(1000)
         return res.json({"user": newUser, "status": created})
     } catch (e) {
         console.log(e)
@@ -92,11 +94,14 @@ app.post('/users', async (req, res) => {
 })
 
 app.get('/users/:userId/', async (req, res) => {
+    
     try {
         const userId = req.params.userId
         const user = await hgetallAsync('user-' + userId)
+        // await sleep(1000)
         return res.json(user)
     } catch (e) {
+        console.log(e)
         res.sendStatus(500)
     }
 })
