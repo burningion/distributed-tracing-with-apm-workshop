@@ -1,8 +1,8 @@
 # Distributed Tracing with APM Workshop
 
-This will be a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
+This is a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
 
-Specifically, this will add:
+Specifically, this adds:
 
 * Starting with Automatic Instrumentation, and a more complex example program
 * More live traffic, to see Trace Search (announced at DASH)
@@ -11,8 +11,6 @@ Specifically, this will add:
 * More relevant examples and names for traces
 * More realistic errors 
 * ... and should also work in Windows.
-
-In the meantime, unless otherwise noted, this repository is a work in progress. 
 
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
