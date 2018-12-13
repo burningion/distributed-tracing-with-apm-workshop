@@ -62,3 +62,4 @@ These are some ideas, that have yet to be implemented:
 * A bad deploy that triggers a problem, breaking parts of API
 * Introducing latency in a service in the middle of the request lifecycle
 * Introducing a traffic spike / poison payload downstream
+* Introducing Chaos changes
