@@ -72,8 +72,9 @@ def call_generate_requests():
     span = tracer.current_span()
     app.logger.info(f"Looking at {span}")
     app.logger.info(f"with span id {span.span_id}")
-    span = tracer.current_span()
 
+    span = tracer.current_span()
+    
     span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
 
     output = subprocess.check_output(['/app/traffic_generator.py',
