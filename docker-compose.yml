@@ -49,8 +49,6 @@ services:
       - agent
       - frontend
       - redis
-    environment:
-      - DD_ENV=dev
     labels:
       com.datadoghq.ad.logs: '[{"source": "noder", "service": "noder"}]'
   pumps:
