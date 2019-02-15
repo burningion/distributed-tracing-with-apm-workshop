@@ -3,7 +3,7 @@ from ddtrace import tracer, patch, config, Pin
 tracer.configure(hostname='agent')
 patch(requests=True,futures=True,asyncio=True)
 
-tracer.set_tags({'env': 'dev'})
+#tracer.set_tags({'env': 'dev'})
 tracer.debug_logging = True
 
 import asyncio
