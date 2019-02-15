@@ -1,7 +1,7 @@
 version: '3'
 services:
   agent:
-    image: "datadog/agent:6.5.2"
+    image: "datadog/agent:6.9.0"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
@@ -11,7 +11,6 @@ services:
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
       - DD_PROCESS_AGENT_ENABLED=true
-      - DD_AC_EXCLUDE='image:agent'
       - DD_TAGS='env:dev'
     ports:
       - "8126:8126"
