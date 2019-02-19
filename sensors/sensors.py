@@ -18,12 +18,8 @@ tracer.configure(hostname='agent')
 #tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
-# enable distributed tracing for requests
-# to send headers (globally)
-config.requests['distributed_tracing'] = True
-
 app = create_app()
-traced_app = TraceMiddleware(app, tracer, service='sensors-api', distributed_tracing=True)
+traced_app = TraceMiddleware(app, tracer, service='sensors-api')
 
 @app.route('/')
 def hello():

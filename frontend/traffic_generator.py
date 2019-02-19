@@ -14,7 +14,6 @@ from requests_threads import AsyncSession
 
 import logging
 logger = logging.getLogger()
-config.requests['distributed_tracing'] = True
 
 parser = argparse.ArgumentParser(description='Concurrent Traffic Generator')
 parser.add_argument('concurrent', type=int, help='Number of Concurrent Requests')

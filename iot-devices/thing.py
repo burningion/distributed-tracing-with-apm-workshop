@@ -17,14 +17,10 @@ tracer.configure(hostname='agent')
 #tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
-# enable distributed tracing for requests
-# to send headers (globally)
-config.requests['distributed_tracing'] = True
-
 app = create_app()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-traced_app = TraceMiddleware(app, tracer, service='pumps-service', distributed_tracing=True)
+traced_app = TraceMiddleware(app, tracer, service='pumps-service')
 
 @app.route('/')
 def hello():

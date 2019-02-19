@@ -18,10 +18,6 @@ tracer.configure(hostname='agent', priority_sampling=True)
 #tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
-# enable distributed tracing for requests
-# to send headers (globally)
-config.requests['distributed_tracing'] = True
-
 app = Flask('api')
 
 if os.environ['FLASK_DEBUG']:
