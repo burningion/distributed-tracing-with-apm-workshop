@@ -3,14 +3,11 @@ from ddtrace import tracer, patch, config, Pin
 tracer.configure(hostname='agent')
 patch(requests=True,futures=True,asyncio=True)
 
-#tracer.set_tags({'env': 'dev'})
 tracer.debug_logging = True
 
 import asyncio
 import argparse
 from requests_threads import AsyncSession
-# enable distributed tracing for requests
-# to send headers (globally)
 
 import logging
 logger = logging.getLogger()

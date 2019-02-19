@@ -3,7 +3,6 @@ from ddtrace import tracer, patch
 patch(sqlalchemy=True,sqlite3=True,psycopg=True)
 from models import Pump, db
 
-
 # configure the tracer so that it reaches the Datadog Agent
 # available in another container
 tracer.configure(hostname='agent')

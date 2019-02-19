@@ -14,7 +14,6 @@ import random
 
 # Tracer configuration
 tracer.configure(hostname='agent')
-#tracer.set_tags({'env': 'dev'})
 patch(requests=True)
 
 app = create_app()
