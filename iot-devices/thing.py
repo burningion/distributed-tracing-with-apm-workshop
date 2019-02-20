@@ -1,3 +1,10 @@
+from ddtrace import tracer, patch_all
+import random
+
+# Tracer configuration
+tracer.configure(hostname='agent')
+patch_all(requests=True,logging=True,flask=True)
+
 import requests
 # from  openzwave.network import ZWaveNetwork
 # from openzwave.option import ZWaveOption
@@ -8,18 +15,8 @@ from flask import request as flask_request
 from bootstrap import create_app
 from models import Pump, db
 
-from ddtrace import tracer, patch, config
-from ddtrace.contrib.flask import TraceMiddleware
-import random
-
-# Tracer configuration
-tracer.configure(hostname='agent')
-patch(requests=True)
-
 app = create_app()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-traced_app = TraceMiddleware(app, tracer, service='pumps-service')
 
 @app.route('/')
 def hello():
