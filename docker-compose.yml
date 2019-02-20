@@ -38,7 +38,7 @@ services:
       - agent
       - db
     labels:
-      com.datadoghq.ad.logs: '[{"source": "iot-frontend", "service": "iot-frontend"}]'
+      com.datadoghq.ad.logs: '[{"source": "python", "service": "iot-frontend"}]'
   noder:
     build: ./node-api
     #image: "burningion/distributed-tracing-workshop-node-api:latest"
@@ -53,7 +53,7 @@ services:
       - frontend
       - redis
     labels:
-      com.datadoghq.ad.logs: '[{"source": "noder", "service": "noder"}]'
+      com.datadoghq.ad.logs: '[{"source": "node", "service": "noder"}]'
   pumps:
     environment:
       - FLASK_APP=thing.py
@@ -76,7 +76,7 @@ services:
       - agent
       - db
     labels:
-      com.datadoghq.ad.logs: '[{"source": "pumps-service", "service": "pumps-service"}]'
+      com.datadoghq.ad.logs: '[{"source": "python", "service": "pumps-service"}]'
   redis:
     image: "redis:5.0-rc4-alpine"
     labels:
@@ -99,7 +99,7 @@ services:
       - agent
       - db
     labels:
-      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "sensor-api"}]'
+      com.datadoghq.ad.logs: '[{"source": "python", "service": "sensor-api"}]'
   db:
     image: postgres:11-alpine
     restart: always
