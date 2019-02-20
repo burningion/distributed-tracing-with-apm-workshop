@@ -1,10 +1,4 @@
-from ddtrace import tracer, patch_all
 import random
-
-# Tracer configuration
-tracer.configure(hostname='agent')
-patch_all(requests=True,logging=True,flask=True)
-
 import requests
 # from  openzwave.network import ZWaveNetwork
 # from openzwave.option import ZWaveOption

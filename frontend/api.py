@@ -6,23 +6,16 @@ from flask import request as flask_request
 from flask_cors import CORS
 import os
 
-from ddtrace import tracer, patch, config
-from ddtrace.contrib.flask import TraceMiddleware
+from ddtrace import tracer
 from ddtrace.ext.priority import USER_REJECT, USER_KEEP
 
 import subprocess
 import random
 
-# Tracer configuration
-tracer.configure(hostname='agent', priority_sampling=True)
-patch(requests=True)
-
 app = Flask('api')
 
 if os.environ['FLASK_DEBUG']:
     CORS(app)
-
-traced_app = TraceMiddleware(app, tracer, service='iot-frontend')
 
 @app.route('/')
 def homepage():
