@@ -3,8 +3,7 @@ import requests
 from flask import Flask, Response, jsonify
 from flask import request as flask_request
 
-from ddtrace import tracer, patch, config
-from ddtrace.contrib.flask import TraceMiddleware
+from ddtrace import tracer
 
 from bootstrap import create_app, db
 from models import Network, Sensor
@@ -13,12 +12,7 @@ import random
 
 sensors = []
 
-# Tracer configuration
-tracer.configure(hostname='agent')
-patch(requests=True)
-
 app = create_app()
-traced_app = TraceMiddleware(app, tracer, service='sensors-api')
 
 @app.route('/')
 def hello():
@@ -31,6 +25,7 @@ def get_sensors():
         system_status = []
         for sensor in sensors:
             system_status.append(sensor.serialize())
+        app.logger.info(f'Sensors GET called with a total of {len(system_status)}')
         return jsonify({'sensor_count': len(system_status),
                         'system_status': system_status})
     elif flask_request.method == 'POST':
