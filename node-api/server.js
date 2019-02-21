@@ -1,5 +1,6 @@
-const tracer = require('dd-trace').init({hostname:'agent', service: 'users-api'})
+const tracer = require('dd-trace').init()
 const express = require('express')
+const winston = require('winston')
 const bodyParser = require('body-parser')
 const uuid = require('uuid/v4')
 const sleep = require('sleep-promise')
@@ -9,12 +10,21 @@ const {promisify} = require('util')
 
 const client = redis.createClient(6379, 'redis')
 
+const logger = new (winston.createLogger)({
+    transports: [
+        new (winston.transports.Console)({
+            name: 'user-api',
+            json: true,
+            level: 'info'
+        })
+    ]
+});
 client.on('connect', () => {
-    console.log('Redis client connected');
+    logger.info('Redis client connected');
 })
 
 client.on('error', (err) => {
-    console.log('Couldn\'t connect to redis: ' + err)
+    logger.info('Couldn\'t connect to redis: ' + err)
 })
 
 const existsAsync = promisify(client.exists).bind(client)
@@ -31,10 +41,10 @@ async function addUsers() {
         // only write user ids if users don't exist
         const exists = await existsAsync('user-' + user.uid)
         if (exists == 1) {
-            console.log('skipping ' + user.uid + ' as it exists')
+            logger.info('skipping ' + user.uid + ' as it exists')
         }
         else {
-            console.log('creating ' + user.uid)
+            logger.info('creating ' + user.uid)
             const created = await hmsetAsync('user-' + user.uid, {
                 'id': user.id,
                 'uid': user.uid,
@@ -42,7 +52,7 @@ async function addUsers() {
                 'demand_gph': user.demand_gph,
                 'users': user.users
             }) 
-            console.log(created)
+            logger.info(created)
         }
     }
 }
@@ -84,11 +94,11 @@ app.post('/users', async (req, res) => {
             'demand_gph': req.body.demand_gph,
             'users': req.body.users
         }
+        logger.info('creating ' + user.uid)
         const created = await hmsetAsync('user-' + uid, newUser) 
-        
         return res.json({"user": newUser, "status": created})
     } catch (e) {
-        console.log(e)
+        logger.info(e)
         res.sendStatus(500)
     }
 })
@@ -98,10 +108,11 @@ app.get('/users/:userId/', async (req, res) => {
     try {
         const userId = req.params.userId
         const user = await hgetallAsync('user-' + userId)
+        logger.info('getting ' + user.uid)
         // await sleep(1000)
         return res.json(user)
     } catch (e) {
-        console.log(e)
+        logger.info(e)
         res.sendStatus(500)
     }
 })
@@ -134,4 +145,4 @@ app.post('/users/:userId/water-level/:waterLevel(\\d+)', async (req, res) => {
     }
 })
 
-app.listen(5004, () => console.log('User demand API listening on port 5004!'))
+app.listen(5004, () => logger.info('User demand API listening on port 5004!'))

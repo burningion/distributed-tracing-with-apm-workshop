@@ -40,6 +40,10 @@ services:
     labels:
       com.datadoghq.ad.logs: '[{"source": "python", "service": "iot-frontend"}]'
   noder:
+    environment:
+      - DD_SERVICE_NAME=users-api
+      - DD_TRACE_AGENT_HOSTNAME=agent
+      - DD_LOGS_INJECTION=true
     build: ./node-api
     #image: "burningion/distributed-tracing-workshop-node-api:latest"
     command: nodemon server.js
@@ -53,7 +57,7 @@ services:
       - frontend
       - redis
     labels:
-      com.datadoghq.ad.logs: '[{"source": "node", "service": "noder"}]'
+      com.datadoghq.ad.logs: '[{"source": "nodejs", "service": "users-api"}]'
   pumps:
     environment:
       - FLASK_APP=thing.py
