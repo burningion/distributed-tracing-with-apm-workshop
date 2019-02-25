@@ -3,3 +3,6 @@ tracenv/
 iot-devices/raspenv
 node-api/node_modules
 single-page-frontend/node_modules
+*.DS_STORE
+.ipynb_checkpoints
+app.db
