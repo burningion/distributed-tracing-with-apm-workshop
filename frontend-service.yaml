@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-service
+  template:
+    metadata:
+      labels:
+        app: frontend-service
+    spec:
+      containers:
+      - name: frontend-service
+        image: frontend-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5005
+        volumeMounts:
+        - name: flasklogs
+          mountPath: /var/log/flask
+        env:
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DOGSTATSD_HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: FLASK_APP
+          value: 'api.py'
+        - name: DD_LOGS_INJECTION
+          value: 'true'
+      volumes:
+        - hostPath:
+            path: /var/log/flask
+          name: flasklogs
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend-service
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5005
+  type: NodePort
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-datadog-confd
+  namespace: default
+data:
+  flasklogs.yaml: |-
+    init_config:
+    instances:
+    logs:
+    - type: file
+      path: /var/log/flask/mylog.json
+      service: flask
+      source: python
+      sourcecategory: sourcecode 

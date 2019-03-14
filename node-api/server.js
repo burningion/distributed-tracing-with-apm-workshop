@@ -70,7 +70,15 @@ app.get('/users', async (req, res) => {
     try {
         const userKeys = await keysAsync('user-*')
         var users = []
-    
+
+        const scope = tracer.scopeManager().active()
+        const span = scope.span()
+        
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+
+        span.addTags({
+            'request-ip': ip
+          })
         for (var userKey in userKeys) {
             user = await hgetallAsync(userKeys[userKey])
             users.push(user)
