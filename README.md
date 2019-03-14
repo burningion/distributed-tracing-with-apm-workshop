@@ -51,6 +51,8 @@ $ eval $(minikube docker-env)
 $ kubectl create secret generic datadog-api --from-literal=token=<YOUR_DATADOG_API_KEY>
 ```
 
+Note, in order to see the running Docker containers from within your native Docker, you may need to either run it per shell instance, or add it to your `.bashrc`.
+
 Next, let's open up our `datadog-agent.yaml` file, and see what settings we have in Kubernetes.
 
 You can open the web app at `http://localhost:5000`, create some pumps, and look at your Datadog traces to see the distributed traces.

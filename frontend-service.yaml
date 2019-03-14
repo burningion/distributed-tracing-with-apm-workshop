@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: frontend-service
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: frontend-service
@@ -31,14 +30,16 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: FLASK_APP
-          value: 'api.py'
+          value: 'api'
         - name: DD_LOGS_INJECTION
           value: 'true'
+        - name: FLASK_DEBUG
+          value: '1'
       volumes:
         - hostPath:
             path: /var/log/flask
           name: flasklogs
-        
+
 ---
 apiVersion: v1
 kind: Service
