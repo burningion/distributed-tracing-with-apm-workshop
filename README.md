@@ -1,4 +1,4 @@
-# Distributed Tracing with APM Workshop
+# Distributed Tracing with APM Workshop on Kubernetes
 
 This is a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
 
@@ -11,6 +11,7 @@ Specifically, this adds:
 * More relevant examples and names for traces
 * More realistic errors 
 * ... and should also work in Windows.
+* ... and Kubernetes!
 
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
@@ -20,9 +21,11 @@ The workshop is scheduled for an hour and a half. In this short time frame, havi
 
 Please ensure you accomplish at least steps 1 and 2 before the event, so everyone has a chance to complete the event.
 
-1. Install [Docker CE](https://store.docker.com/search?type=edition&offering=community), allowing us to use Docker and Docker Compose. Please note you will be required to create an account in order to download Docker CE. 
+1. Install [Docker CE](https://store.docker.com/search?type=edition&offering=community), allowing us to use Docker and Docker Compose. Please note you will be required to create an account in order to download Docker CE.
 
-2. Pull Docker images to your local machine *before the event*, so we don't all overwhelm the WiFi. 
+2. Install [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/). For now, it's best to just run it vanilla, as a VM. This way, we have isolation for our software.
+
+3. Pull Docker images to your local machine *before the event*, so we don't all overwhelm the WiFi. 
 
 You can do this by cloning this repo, and running a `docker-compose up` in the top level directory. This will pull the images and libraries to your local computer. This will take a few minutes. 
 
@@ -34,15 +37,21 @@ If you want to be able to add notes and save them locally, you'll want to instal
 
 This is completely optional, as Github has a built in viewer for Jupyter notebooks. You can view the repo's notebook [here](https://github.com/burningion/distributed-tracing-with-apm-workshop/blob/master/Distributed%20Tracing%20Workshop.ipynb).
 
-# Running the Application
+# Running the Application in Kubernetes
 
 ![Water Sensor App](https://github.com/burningion/distributed-tracing-with-apm-workshop/raw/master/images/dashboard.png)
 
 You'll need to have a Datadog account with APM and logging enabled. A free trial should work to play with.
 
+The first thing we'll do is start minikube, link it to our host's Docker, and add the Datadog API key as a Kubernetes secret:
+
 ```bash
-$ POSTGRES_USER=postgres POSTGRES_PASSWORD=<pg password> DD_API_KEY=<api key> docker-compose up
+$ minikube start
+$ eval $(minikube docker-env)
+$ kubectl create secret generic datadog-api --from-literal=token=<YOUR_DATADOG_API_KEY>
 ```
+
+Next, let's open up our `datadog-agent.yaml` file, and see what settings we have in Kubernetes.
 
 You can open the web app at `http://localhost:5000`, create some pumps, and look at your Datadog traces to see the distributed traces.
 
