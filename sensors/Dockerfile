@@ -8,3 +8,5 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 # uncomment below to build zwave for ARM, also add Cython back into requirements
 # RUN pip install python_openzwave --no-deps --no-cache-dir --install-option="--flavor=shared"
+COPY . /app
+CMD ["flask", "run"]
