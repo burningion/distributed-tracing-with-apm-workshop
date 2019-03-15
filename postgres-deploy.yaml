@@ -1,33 +1,3 @@
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: postgres-pv-volume
-  labels:
-    type: local
-    app: postgres
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "./postgres"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: postgres-pv-claim
-  labels:
-    app: postgres
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 5Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -61,18 +31,11 @@ spec:
             secretKeyRef:
               name: postgres-password
               key: token
-        volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgredb
         ports:
         - containerPort: 5432
           hostPort: 5432
           name: postgresport
           protocol: TCP
-      volumes:
-        - name: postgredb
-          persistentVolumeClaim:
-            claimName: postgres-pv-claim
 ---
 apiVersion: v1
 kind: Service
