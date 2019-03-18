@@ -32,6 +32,8 @@ spec:
           value: 'true'
         - name: FLASK_DEBUG
           value: '1'
+        - name: FLASK_RUN_PORT
+          value: '5001'
 ---
 apiVersion: v1
 kind: Service
