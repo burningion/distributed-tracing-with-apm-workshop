@@ -55,7 +55,13 @@ Note, in order to see the running Docker containers from within your native Dock
 
 Next, let's open up our `datadog-agent.yaml` file, and see what settings we have in Kubernetes.
 
-You can open the web app at `http://localhost:5000`, create some pumps, and look at your Datadog traces to see the distributed traces.
+In order to grab the URL your application is running on with Minikube, you need to use a special command:
+
+```bash
+$ minikube service frontend-service --url
+```
+
+You can open the web app at `http://localhost:5000` (or your Minikube URL), create some pumps, and look at your Datadog traces to see the distributed traces.
 
 The frontend of the app is a React node app using [Material UI](https://material-ui.com/). It lives in the `single-page-frontend` folder. You can start it up for development with a:
 
