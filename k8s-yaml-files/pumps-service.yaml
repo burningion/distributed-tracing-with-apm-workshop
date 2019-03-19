@@ -34,6 +34,8 @@ spec:
           value: '1'
         - name: FLASK_RUN_PORT
           value: '5001'
+        - name: DATADOG_SERVICE_NAME
+          value: 'pumps-service'
 ---
 apiVersion: v1
 kind: Service

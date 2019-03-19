@@ -26,6 +26,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: DATADOG_SERVICE_NAME
+          value: 'sensors-api'
         - name: FLASK_APP
           value: 'sensors'
         - name: DD_LOGS_INJECTION

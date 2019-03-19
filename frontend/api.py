@@ -23,6 +23,10 @@ SENSORS_URL = f"http://{environ['SENSORS_API_SERVICE_HOST']}:{environ['SENSORS_A
 PUMPS_URL = f"http://{environ['PUMPS_SERVICE_SERVICE_HOST']}:{environ['PUMPS_SERVICE_SERVICE_PORT']}"
 NODE_URL = f"http://{environ['NODE_API_SERVICE_HOST']}:{environ['NODE_API_SERVICE_PORT_HTTP']}"
 
+app.logger.info(SENSORS_URL)
+app.logger.info(PUMPS_URL)
+app.logger.info(NODE_URL)
+
 @app.route('/')
 def homepage():
     return app.send_static_file('index.html')
