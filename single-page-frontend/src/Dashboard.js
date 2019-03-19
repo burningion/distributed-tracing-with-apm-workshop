@@ -189,7 +189,7 @@ class Dashboard extends React.Component {
       axios.post(rootURL + "/generate_requests", 
       {'concurrent': concurrent,
       'total': total,
-      'url': 'http://noder:5004/users'},
+      'url': '/users'},
       {crossdomain: true}).then(response => {
         this.setState({requestsOpen: true, requestCount: total})
       })
@@ -199,7 +199,7 @@ class Dashboard extends React.Component {
       axios.post(rootURL + "/generate_requests", 
       {'concurrent': concurrent,
       'total': total,
-      'url': 'http://noder:5004/users'},
+      'url': '/users'},
       {crossdomain: true}).then(response => {
         this.setState({requestsOpen: true, requestCount: total})
       })

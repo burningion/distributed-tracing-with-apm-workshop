@@ -75,7 +75,8 @@ def call_generate_requests():
     
     span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
 
-    output = subprocess.check_output(['/app/traffic_generator.py',
+    output = subprocess.check_output(['ddtrace-run', 
+                                      '/app/traffic_generator.py',
                                       str(payload['concurrent']), 
                                       str(payload['total']),
                                       str(payload['url'])])
@@ -94,10 +95,11 @@ def call_generate_requests_user():
     span.context.sampling_priority = USER_KEEP
     span.set_tags({'user_id': user['id']})
 
-    output = subprocess.check_output(['/app/traffic_generator.py',
-                                     '20',
-                                     '100',
-                                     f"{NODE_URL}/users/" + user['uid']])
+    output = subprocess.check_output(['ddtrace-run',
+                                    '/app/traffic_generator.py',
+                                    '20',
+                                    '100',
+                                    f"{NODE_URL}/users/" + user['uid']])
     app.logger.info(f"Chose random user {user['name']} for requests: {output}")
     return jsonify({'random_user': user['name']})
 
