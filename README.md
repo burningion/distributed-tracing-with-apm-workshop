@@ -49,6 +49,8 @@ The first thing we'll do is start minikube, link it to our host's Docker, and ad
 $ minikube start
 $ eval $(minikube docker-env)
 $ kubectl create secret generic datadog-api --from-literal=token=<YOUR_DATADOG_API_KEY>
+$ kubectl create secret generic postgres-user --from-literal=token=postgres
+$ kubectl create secret generic postgres-password --from-literal=token=<YOUR_PASSWORD>
 ```
 
 Note, in order to see the running Docker containers from within your native Docker, you may need to either run it per shell instance, or add it to your `.bashrc`.

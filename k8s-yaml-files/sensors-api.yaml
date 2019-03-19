@@ -36,6 +36,16 @@ spec:
           value: '1'
         - name: FLASK_RUN_PORT
           value: '5002'
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-user
+              key: token
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-password
+              key: token
 ---
 apiVersion: v1
 kind: Service
