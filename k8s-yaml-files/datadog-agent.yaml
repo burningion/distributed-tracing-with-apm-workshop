@@ -10,7 +10,7 @@ spec:
       name: datadog-agent
     spec:
       containers:
-      - image: datadog/agent:6.10.1
+      - image: datadog/agent:6.10.2
         imagePullPolicy: Always
         name: datadog-agent
         ports:
@@ -40,7 +40,7 @@ spec:
           - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
             value: "true"
           - name: DD_PROCESS_AGENT_ENABLED
-            value: "false"
+            value: "true"
           # APM
           - name: DD_APM_ENABLED
             value: "true"
@@ -70,11 +70,6 @@ spec:
           - name: cgroups
             mountPath: /host/sys/fs/cgroup
             readOnly: true
-          - name: flasklogs
-            mountPath: /var/log/flask
-            readOnly: true
-          - name: vol-datadog-confd
-            mountPath: /conf.d
           - name: passwd
             mountPath: /etc/passwd
             readOnly: true
@@ -94,12 +89,6 @@ spec:
         - hostPath:
             path: /sys/fs/cgroup
           name: cgroups
-        - hostPath:
-            path: /var/log/flask
-          name: flasklogs
-        - name: vol-datadog-confd
-          configMap:
-            name: cm-datadog-confd
         - hostPath:
             path: /etc/passwd
           name: passwd
