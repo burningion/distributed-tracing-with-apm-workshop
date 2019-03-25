@@ -53,7 +53,7 @@ spec:
           - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
             value: "true"
           - name: DD_TAGS
-            value: "env:apm-workshop"
+            value: "env:k8s-apm-workshop"
         resources:
           requests:
             memory: "256Mi"
