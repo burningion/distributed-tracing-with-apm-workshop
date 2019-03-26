@@ -59,6 +59,7 @@ spec:
   - name: http
     protocol: TCP
     port: 5005
+    nodePort: 30001
   type: NodePort
 ---
 kind: ConfigMap
