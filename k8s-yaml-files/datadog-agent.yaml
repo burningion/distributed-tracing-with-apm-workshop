@@ -10,7 +10,7 @@ spec:
       name: datadog-agent
     spec:
       containers:
-      - image: datadog/agent:6.10.1
+      - image: datadog/agent:6.10.2
         imagePullPolicy: Always
         name: datadog-agent
         ports:
@@ -40,7 +40,7 @@ spec:
           - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
             value: "true"
           - name: DD_PROCESS_AGENT_ENABLED
-            value: "false"
+            value: "true"
           # APM
           - name: DD_APM_ENABLED
             value: "true"
@@ -48,19 +48,16 @@ spec:
             value: "true"
           # For Trace Search
           - name: DD_APM_ANALYZED_SPANS
-            value: "my-flask-app|flask.request=1,postgres_service|postgres.query=1"
+            value: "users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1"
           # For dogstatsd
           - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
             value: "true"
           - name: DD_TAGS
-            value: "env:apm-workshop"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "200m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
+            value: "env:k8s-apm-workshop"
+          - name: DD_KUBELET_TLS_VERIFY
+            value: "false"
+          - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
+            value: "true"
         volumeMounts:
           - name: dockersocket
             mountPath: /var/run/docker.sock
@@ -70,21 +67,15 @@ spec:
           - name: cgroups
             mountPath: /host/sys/fs/cgroup
             readOnly: true
-          - name: flasklogs
-            mountPath: /var/log/flask
-            readOnly: true
-          - name: vol-datadog-confd
-            mountPath: /conf.d
           - name: passwd
             mountPath: /etc/passwd
             readOnly: true
-        livenessProbe:
-          exec:
-            command:
-            - ./probe.sh
-          initialDelaySeconds: 15
-          periodSeconds: 5
+          - name: pointerdir
+            mountPath: /opt/datadog-agent/run
       volumes:
+        - hostPath:
+            path: /opt/datadog-agent/run
+          name: pointerdir
         - hostPath:
             path: /var/run/docker.sock
           name: dockersocket
@@ -94,12 +85,6 @@ spec:
         - hostPath:
             path: /sys/fs/cgroup
           name: cgroups
-        - hostPath:
-            path: /var/log/flask
-          name: flasklogs
-        - name: vol-datadog-confd
-          configMap:
-            name: cm-datadog-confd
         - hostPath:
             path: /etc/passwd
           name: passwd
