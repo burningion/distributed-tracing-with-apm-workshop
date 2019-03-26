@@ -54,13 +54,10 @@ spec:
             value: "true"
           - name: DD_TAGS
             value: "env:k8s-apm-workshop"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "200m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
+          - name: DD_KUBELET_TLS_VERIFY
+            value: "false"
+          - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
+            value: "true"
         volumeMounts:
           - name: dockersocket
             mountPath: /var/run/docker.sock
@@ -73,13 +70,12 @@ spec:
           - name: passwd
             mountPath: /etc/passwd
             readOnly: true
-        livenessProbe:
-          exec:
-            command:
-            - ./probe.sh
-          initialDelaySeconds: 15
-          periodSeconds: 5
+          - name: pointerdir
+            mountPath: /opt/datadog-agent/run
       volumes:
+        - hostPath:
+            path: /opt/datadog-agent/run
+          name: pointerdir
         - hostPath:
             path: /var/run/docker.sock
           name: dockersocket
