@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: pumps-service
-        image: burningion/k8s-distributed-tracing-pumps::latest
+        image: burningion/k8s-distributed-tracing-pumps:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5001
