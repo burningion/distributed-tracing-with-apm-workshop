@@ -6,8 +6,10 @@ from flask import request as flask_request
 from flask_cors import CORS
 import os
 
+import ddtrace
 from ddtrace import tracer
 from ddtrace.ext.priority import USER_REJECT, USER_KEEP
+ddtrace.config.analytics_enabled = True
 
 import subprocess
 import random

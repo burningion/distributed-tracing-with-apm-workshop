@@ -6,6 +6,8 @@ import requests
 from flask import Flask, Response, jsonify
 from flask import request as flask_request
 
+import ddtrace
+ddtrace.config.analytics_enabled = True
 from bootstrap import create_app
 from models import Pump, db
 
