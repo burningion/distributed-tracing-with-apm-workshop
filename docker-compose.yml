@@ -1,13 +1,12 @@
 version: '3'
 services:
   agent:
-    image: "datadog/agent:6.9.0"
+    image: "datadog/agent:6.10.2"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
       # Add DD_APM_ANALYZED_SPANS to the Agent container environment.
       # Compatible with version 12.6.5250 or above.
-      - DD_APM_ANALYZED_SPANS=users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
       - DD_PROCESS_AGENT_ENABLED=true
@@ -27,6 +26,7 @@ services:
       - DATADOG_SERVICE_NAME=iot-frontend
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
+      - DD_TRACE_ANALYTICS_ENABLED=true
     build: .
     #image: "burningion/distributed-tracing-workshop-frontend:latest"
     command: ddtrace-run flask run --port=5000 --host=0.0.0.0
@@ -67,6 +67,7 @@ services:
       - DATADOG_SERVICE_NAME=pumps-service
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
+      - DD_TRACE_ANALYTICS_ENABLED=true
       #- DATADOG_TRACE_DEBUG=true
     build: ./iot-devices
     #image: "burningion/distributed-tracing-workshop-iot-devices:latest"
@@ -94,6 +95,7 @@ services:
       - DATADOG_SERVICE_NAME=sensors-api
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
+      - DD_TRACE_ANALYTICS_ENABLED=true
     build: ./sensors
     #image: "burningion/distributed-tracing-workshop-sensors-api:latest"
     command: ddtrace-run flask run --port=5002 --host=0.0.0.0
