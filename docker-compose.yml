@@ -1,7 +1,7 @@
 version: '3'
 services:
   agent:
-    image: "datadog/agent:6.9.0"
+    image: "datadog/agent:6.10.0"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
@@ -24,7 +24,7 @@ services:
       - DATADOG_SERVICE_NAME=iot-frontend
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-    build: .
+    #build: .
     image: "burningion/distributed-tracing-workshop-frontend:latest"
     command: ddtrace-run flask run --port=5000 --host=0.0.0.0
     ports:
@@ -40,7 +40,7 @@ services:
       - DD_SERVICE_NAME=users-api
       - DD_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-    build: ./node-api
+    #build: ./node-api
     image: "burningion/distributed-tracing-workshop-node-api:latest"
     command: nodemon server.js
     ports:
@@ -63,7 +63,7 @@ services:
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
       #- DATADOG_TRACE_DEBUG=true
-    build: ./iot-devices
+    #build: ./iot-devices
     image: "burningion/distributed-tracing-workshop-iot-devices:latest"
     command: ddtrace-run flask run --port=5001 --host=0.0.0.0
     ports:
@@ -87,7 +87,7 @@ services:
       - DATADOG_SERVICE_NAME=sensors-api
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-    build: ./sensors
+    #build: ./sensors
     image: "burningion/distributed-tracing-workshop-sensors-api:latest"
     command: ddtrace-run flask run --port=5002 --host=0.0.0.0
     ports:
