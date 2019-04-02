@@ -8,7 +8,7 @@ import os
 
 from ddtrace import tracer
 from ddtrace.ext.priority import USER_REJECT, USER_KEEP
-
+import logging
 import subprocess
 import random
 
@@ -46,6 +46,7 @@ def users():
 @app.route('/add_sensor')
 def add_sensor():
     sensors = requests.post('http://sensors:5002/sensors').json()
+    app.logger.info(f"Adding {sensors}")
     return jsonify(sensors)
     
 @app.route('/add_pump', methods=['POST'])
