@@ -45,9 +45,6 @@ services:
     command: nodemon server.js
     ports:
       - "5004:5004"
-    volumes:
-      - "./node-api:/app"
-      - /app/node_modules
     depends_on:
       - agent
       - frontend
