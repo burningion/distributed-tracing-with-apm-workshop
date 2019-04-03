@@ -10,7 +10,7 @@ services:
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
       - DD_PROCESS_AGENT_ENABLED=true
-      - DD_TAGS='env:dev'
+      - DD_TAGS='env:apm-workshop'
     ports:
       - "8126:8126"
     volumes:
@@ -26,7 +26,7 @@ services:
       - DATADOG_SERVICE_NAME=iot-frontend
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-      - DD_TRACE_ANALYTICS_ENABLED=true
+      - DD_ANALYTICS_ENABLED=true
     build: .
     #image: "burningion/distributed-tracing-workshop-frontend:latest"
     command: ddtrace-run flask run --port=5000 --host=0.0.0.0
@@ -44,14 +44,16 @@ services:
       - DD_SERVICE_NAME=users-api
       - DD_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-    build: ./node-api
-    #image: "burningion/distributed-tracing-workshop-node-api:latest"
+      - DD_TRACE_ANALYTICS_ENABLED=true
+    #build: ./node-api
+    image: "burningion/distributed-tracing-workshop-node-api:latest"
     command: nodemon server.js
     ports:
       - "5004:5004"
-    volumes:
-      - "./node-api:/app"
-      - /app/node_modules
+    # uncomment below to live develop node
+    #volumes:
+    #  - "./node-api:/app"
+    #  - /app/node_modules
     depends_on:
       - agent
       - frontend
@@ -67,7 +69,7 @@ services:
       - DATADOG_SERVICE_NAME=pumps-service
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-      - DD_TRACE_ANALYTICS_ENABLED=true
+      - DD_ANALYTICS_ENABLED=true
       #- DATADOG_TRACE_DEBUG=true
     build: ./iot-devices
     #image: "burningion/distributed-tracing-workshop-iot-devices:latest"
@@ -95,7 +97,7 @@ services:
       - DATADOG_SERVICE_NAME=sensors-api
       - DATADOG_TRACE_AGENT_HOSTNAME=agent
       - DD_LOGS_INJECTION=true
-      - DD_TRACE_ANALYTICS_ENABLED=true
+      - DD_ANALYTICS_ENABLED=true
     build: ./sensors
     #image: "burningion/distributed-tracing-workshop-sensors-api:latest"
     command: ddtrace-run flask run --port=5002 --host=0.0.0.0
