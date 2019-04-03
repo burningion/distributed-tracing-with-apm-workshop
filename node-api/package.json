@@ -10,7 +10,7 @@
   "dependencies": {
     "await-sleep": "0.0.1",
     "body-parser": "^1.18.3",
-    "dd-trace": "^0.9.2",
+    "dd-trace": "^0.10.3",
     "express": "^4.16.3",
     "nodemon": "^1.18.4",
     "redis": "^2.8.0",
