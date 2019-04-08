@@ -75,7 +75,8 @@ app.get('/users', async (req, res) => {
             user = await hgetallAsync(userKeys[userKey])
             users.push(user)
         }
-        // await sleep(1000)
+        logger.info('User list called within User API')
+        await sleep(1000)
         await res.json(users)
     } catch (e) {
         res.sendStatus(500)

@@ -38,14 +38,17 @@ def system_status():
 def users():
     if flask_request.method == 'POST':
         newUser = flask_request.get_json()
+        app.logger.info(f"Adding new user: {newUser}")
         userStatus = requests.post('http://noder:5004/users', json=newUser).json()
         return jsonify(userStatus)
     elif flask_request.method == 'GET':
+        app.logger.info(f"Getting all users")
         users = requests.get('http://noder:5004/users').json()
         return jsonify(users)
 
 @app.route('/add_sensor')
 def add_sensor():
+    app.logger.info('Adding a new sensor')
     sensors = requests.post('http://sensors:5002/sensors').json()
     return jsonify(sensors)
     
@@ -92,5 +95,6 @@ def call_generate_requests_user():
 
 @app.route('/simulate_sensors')
 def simulate_sensors():
+    app.logger.info('Simulating refresh of sensor data')
     sensors = requests.get('http://sensors:5002/refresh_sensors').json()
     return jsonify(sensors)
