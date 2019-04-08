@@ -8,6 +8,8 @@ from flask import request as flask_request
 
 from bootstrap import create_app
 from models import Pump, db
+import time
+
 
 app = create_app()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -23,6 +25,7 @@ def status():
         app.logger.info(f"Pumps available: {pumps}")
         pump_obj = {'pump_count': len(pumps),
                     'status': []}
+        time.sleep(.5)
         for pump in pumps:
             pump_obj['status'].append(pump.serialize())
         return jsonify(pump_obj)
@@ -36,7 +39,7 @@ def status():
         db.session.add(new_pump)
         db.session.commit()
         pumps = Pump.query.all()
-        
+        time.sleep(.5)
         return jsonify([b.serialize() for b in pumps])
     else:
         err = jsonify({'error': 'Invalid request method'})

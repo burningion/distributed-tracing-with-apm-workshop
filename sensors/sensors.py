@@ -9,6 +9,7 @@ from bootstrap import create_app, db
 from models import Network, Sensor
 
 import random
+import time
 
 sensors = []
 
@@ -23,6 +24,7 @@ def get_sensors():
     if flask_request.method == 'GET':
         sensors = Sensor.query.all()
         system_status = []
+        time.sleep(1.2)
         for sensor in sensors:
             system_status.append(sensor.serialize())
         app.logger.info(f'Sensors GET called with a total of {len(system_status)}')
