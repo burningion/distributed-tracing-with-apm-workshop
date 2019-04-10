@@ -61,10 +61,8 @@ def add_pump():
 @app.route('/generate_requests', methods=['POST'])
 def call_generate_requests():
     payload = flask_request.get_json()
-    span = tracer.current_span()
-    app.logger.info(f"Looking at {span}")
-    app.logger.info(f"with span id {span.span_id}")
-    
+    span = tracer.current_root_span()
+    span.context.sampling_priority = USER_KEEP
     span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
 
     output = subprocess.check_output(['/app/traffic_generator.py',
@@ -82,7 +80,7 @@ def call_generate_requests():
 def call_generate_requests_user():
     users = requests.get('http://noder:5004/users').json()
     user = random.choice(users)
-    span = tracer.current_span()
+    span = tracer.current_root_span()
     span.context.sampling_priority = USER_KEEP
     span.set_tags({'user_id': user['id']})
 
