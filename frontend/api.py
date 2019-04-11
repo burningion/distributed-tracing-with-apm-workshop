@@ -20,10 +20,12 @@ if os.environ['FLASK_DEBUG']:
 
 @app.route('/')
 def homepage():
+    app.logger.info("Homepage called")
     return app.send_static_file('index.html')
 
 @app.route('/service-worker.js')
 def service_worker_js():
+    app.logger.info("Service worker JS called")
     return app.send_static_file('js/service-worker.js')
 
 @app.route('/status')
