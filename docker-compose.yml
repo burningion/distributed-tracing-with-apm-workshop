@@ -76,7 +76,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - "./iot-devices:/app"
+      - "./pumps-api:/app"
     depends_on:
       - frontend
       - agent
