@@ -39,6 +39,8 @@ def status():
         db.session.add(new_pump)
         db.session.commit()
         pumps = Pump.query.all()
+
+        # adding a half sleep to test something
         time.sleep(.5)
         return jsonify([b.serialize() for b in pumps])
     else:
