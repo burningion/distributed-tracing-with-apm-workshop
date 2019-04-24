@@ -9,6 +9,7 @@ spec:
         app: datadog-agent
       name: datadog-agent
     spec:
+      hostNetwork: true
       containers:
       - image: datadog/agent:6.10.2
         imagePullPolicy: Always
