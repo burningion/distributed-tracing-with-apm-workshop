@@ -3,6 +3,10 @@ kind: DaemonSet
 metadata:
   name: datadog-agent
 spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
       labels:
