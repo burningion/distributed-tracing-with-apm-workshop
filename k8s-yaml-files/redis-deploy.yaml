@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: redis
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   replicas: 1
   selector:
     matchLabels:

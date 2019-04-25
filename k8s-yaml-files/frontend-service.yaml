@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: frontend-service
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: frontend-service

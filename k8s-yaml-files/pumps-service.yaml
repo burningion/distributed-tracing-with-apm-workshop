@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: pumps-service
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: pumps-service
