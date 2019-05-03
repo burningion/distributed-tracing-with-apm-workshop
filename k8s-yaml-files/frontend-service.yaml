@@ -19,15 +19,12 @@ spec:
       containers:
       - name: frontend-service
         image: burningion/k8s-distributed-tracing-frontend:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5005
           hostPort: 5005
           name: frontendport
           protocol: TCP
-        volumeMounts:
-        - name: flasklogs
-          mountPath: /var/log/flask
         env:
         - name: DD_AGENT_HOST
           valueFrom:
@@ -47,11 +44,8 @@ spec:
           value: '1'
         - name: FLASK_RUN_PORT
           value: '5005'
-      volumes:
-        - hostPath:
-            path: /var/log/flask
-          name: flasklogs
-
+        - name: DD_ANALYTICS_ENABLED
+          value: 'true'
 ---
 apiVersion: v1
 kind: Service
@@ -66,19 +60,3 @@ spec:
     port: 5005
     nodePort: 30001
   type: NodePort
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: cm-datadog-confd
-  namespace: default
-data:
-  flasklogs.yaml: |-
-    init_config:
-    instances:
-    logs:
-    - type: file
-      path: /var/log/flask/mylog.json
-      service: flask
-      source: python
-      sourcecategory: sourcecode 

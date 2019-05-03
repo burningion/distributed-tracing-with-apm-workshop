@@ -19,7 +19,7 @@ spec:
       containers:
       - name: node-api
         image: burningion/k8s-distributed-tracing-users:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5004
           name: node-port
@@ -37,6 +37,8 @@ spec:
           value: 'users-api'
         - name: DD_LOGS_INJECTION
           value: 'true'
+        - name: DD_ANALYTICS_ENABLED
+          value: 'true'
 ---
 apiVersion: v1
 kind: Service
@@ -50,9 +52,3 @@ spec:
     protocol: TCP
     port: 5004
   type: NodePort
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: cm-datadog-confd
-  namespace: default

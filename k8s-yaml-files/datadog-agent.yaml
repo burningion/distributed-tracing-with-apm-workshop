@@ -15,7 +15,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: datadog/agent:6.10.2
+      - image: datadog/agent:6.11.0
         imagePullPolicy: Always
         name: datadog-agent
         ports:
@@ -51,16 +51,11 @@ spec:
             value: "true"
           - name: DD_APM_NON_LOCAL_TRAFFIC
             value: "true"
-          # For Trace Search
-          - name: DD_APM_ANALYZED_SPANS
-            value: "users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1"
           # For dogstatsd
           - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
             value: "true"
           - name: DD_TAGS
             value: "env:k8s-apm-workshop"
-          - name: DD_KUBELET_TLS_VERIFY
-            value: "false"
           - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
             value: "true"
         volumeMounts:

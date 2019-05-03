@@ -19,7 +19,7 @@ spec:
       containers:
       - name: sensors-api
         image: burningion/k8s-distributed-tracing-sensors:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5002
         env:
@@ -41,6 +41,8 @@ spec:
           value: '1'
         - name: FLASK_RUN_PORT
           value: '5002'
+        - name: DD_ANALYTICS_ENABLED
+          value: 'true'
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
@@ -64,9 +66,3 @@ spec:
     protocol: TCP
     port: 5002
   type: NodePort
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: cm-datadog-confd
-  namespace: default

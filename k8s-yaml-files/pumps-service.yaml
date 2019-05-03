@@ -19,7 +19,7 @@ spec:
       containers:
       - name: pumps-service
         image: burningion/k8s-distributed-tracing-pumps:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5001
         env:
@@ -41,6 +41,8 @@ spec:
           value: '5001'
         - name: DATADOG_SERVICE_NAME
           value: 'pumps-service'
+        - name: DD_ANALYTICS_ENABLED
+          value: 'true'
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
@@ -64,9 +66,3 @@ spec:
     protocol: TCP
     port: 5001
   type: NodePort
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: cm-datadog-confd
-  namespace: default
