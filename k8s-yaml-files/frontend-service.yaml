@@ -46,6 +46,8 @@ spec:
           value: '5005'
         - name: DD_ANALYTICS_ENABLED
           value: 'true'
+        - name: DATADOG_PATCH_MODULES
+          value: 'requests:true'
 ---
 apiVersion: v1
 kind: Service

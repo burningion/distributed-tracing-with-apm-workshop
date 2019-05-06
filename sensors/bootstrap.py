@@ -1,12 +1,5 @@
 from flask import Flask
-from ddtrace import tracer, patch
-patch(sqlalchemy=True,sqlite3=True,psycopg=True)
 from models import Sensor, Network, db
-
-
-# configure the tracer so that it reaches the Datadog Agent
-# available in another container
-tracer.configure(hostname='agent')
 
 import os
 DB_USERNAME = os.environ['POSTGRES_USER']
