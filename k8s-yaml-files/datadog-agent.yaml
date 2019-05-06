@@ -15,7 +15,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: datadog/agent:6.11.0
+      - image: datadog/agent:6.11.1
         imagePullPolicy: Always
         name: datadog-agent
         ports:
@@ -58,6 +58,8 @@ spec:
             value: "env:k8s-apm-workshop"
           - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
             value: "true"
+          - name: DD_KUBELET_TLS_VERIFY
+            value: "false"
         volumeMounts:
           - name: dockersocket
             mountPath: /var/run/docker.sock
