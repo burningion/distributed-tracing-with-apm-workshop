@@ -56,8 +56,6 @@ spec:
             value: "true"
           - name: DD_TAGS
             value: "env:k8s-apm-workshop"
-          - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
-            value: "true"
           - name: DD_KUBELET_TLS_VERIFY
             value: "false"
         volumeMounts:
