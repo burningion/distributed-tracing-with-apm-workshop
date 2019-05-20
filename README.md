@@ -14,6 +14,8 @@ Specifically, this adds:
 
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
+**This workshop also exists in [Kubernetes](https://github.com/burningion/distributed-tracing-with-apm-workshop/tree/k8s-autodiscovery) on another branch.**
+
 # Before the Workshop / Prerequisites
 
 The workshop is scheduled for an hour and a half. In this short time frame, having prerequisites installed is crucial to maximize everyone's hands on time.
