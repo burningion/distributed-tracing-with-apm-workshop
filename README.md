@@ -1,6 +1,6 @@
 # Distributed Tracing with APM Workshop
 
-This is a follow up repo to my [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
+This is a follow up repo to a [2018 Dash APM Workshop](https://github.com/burningion/dash-apm-workshop), incorporating feedback from the event.
 
 Specifically, this adds:
 
@@ -15,6 +15,10 @@ Specifically, this adds:
 If you've stumbled upon it and have feedback, or have something you'd  like to see, feel free to create an issue.
 
 **This workshop also exists in [Kubernetes](https://github.com/burningion/distributed-tracing-with-apm-workshop/tree/k8s-autodiscovery) on another branch.**
+
+You can view a live, interactive version of this repo on Katacoda [here](https://www.katacoda.com/burningion/scenarios/distributed-tracing-datadog).
+
+If you're interested in learning more about using APM in kubernetes, this repo is also used in the [Introduction to Monitoring Kubernetes](https://learn.datadoghq.com/enrol/index.php?id=14) course live on Datadog's Learning system.
 
 # Before the Workshop / Prerequisites
 
