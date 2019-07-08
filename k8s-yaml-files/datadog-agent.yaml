@@ -15,7 +15,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: datadog/agent:6.11.1
+      - image: datadog/agent:6.12.1
         imagePullPolicy: Always
         name: datadog-agent
         ports:
@@ -55,7 +55,7 @@ spec:
           - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
             value: "true"
           - name: DD_TAGS
-            value: "env:k8s-apm-workshop"
+            value: "env:golang-k8s-workshop"
           - name: DD_KUBELET_TLS_VERIFY
             value: "false"
         volumeMounts:
