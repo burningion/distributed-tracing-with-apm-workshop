@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-concurrent-service
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: go-concurrent-service
+  template:
+    metadata:
+      labels:
+        app: go-concurrent-service
+    spec:
+      containers:
+      - name: go-concurrent-service
+        image: burningion/golang-k8s-distributed-tracing-concurrent:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          hostPort: 8080
+          name: concurrentport
+          protocol: TCP
+        env:
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_TRACE_AGENT_PORT
+          value: 8126
+        - name: DOGSTATSD_HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DATADOG_SERVICE_NAME
+          value: 'go-concurrent-service'
+        - name: DD_ANALYTICS_ENABLED
+          value: 'true'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-concurrent-service
+spec:
+  selector:
+    app: go-concurrent-service
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    nodePort: 30002
+  type: NodePort
