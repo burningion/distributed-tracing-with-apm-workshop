@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	log "github.com/Sirupsen/logrus"
 
@@ -125,9 +126,11 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 
 	tracedClient := httptrace.WrapClient(&http.Client{Transport: tr})
 
+	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + os.Getenv("NODE_SERVICE_PORT_HTTP")
+
 	ch := make(chan string)
 	for i := 0; i < 100; i++ {
-		req, err := getWithContext(r.Context(), "http://localhost")
+		req, err := getWithContext(r.Context(), sensorsURL+"/users/1")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
