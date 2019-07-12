@@ -163,7 +163,7 @@ func main() {
 	tracer.Start()
 	defer tracer.Stop()
 
-	mux := httptrace.NewServeMux(httptrace.WithServiceName("golang-concurrent-requests"), httptrace.WithAnalytics(true)) // init the http tracer
+	mux := httptrace.NewServeMux(httptrace.WithServiceName("go-concurrent-service"), httptrace.WithAnalytics(true)) // init the http tracer
 	mux.HandleFunc("/generate_requests", withSpanAndLogger(getConcurrent))
 	mux.HandleFunc("/generate_requests_user", withSpanAndLogger(getConcurrentRandom))
 	mux.HandleFunc("/", withSpanAndLogger(sayPong)) // use the tracer to handle the urls
