@@ -3,7 +3,7 @@
   wget -qO/go/bin/dep https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 && \
   chmod +x /go/bin/dep
 
-  ENV PROJECT github.com/burningion/golang-playground
+  ENV PROJECT github.com/burningion/go-concurrent-service
   WORKDIR /go/src/$PROJECT
 
   # restore dependencies
@@ -16,8 +16,8 @@
   RUN apk add --no-cache ca-certificates \
   busybox-extras net-tools bind-tools
   WORKDIR /frontend
-  COPY --from=builder /go/bin/golang-playground /frontend/golang-playground
+  COPY --from=builder /go/bin/go-concurrent-service /frontend/go-concurrent-service
   #COPY ./templates ./templates
   #COPY ./static ./static
   EXPOSE 8080
-  ENTRYPOINT ["/frontend/golang-playground"]
+  ENTRYPOINT ["/frontend/go-concurrent-service"]
