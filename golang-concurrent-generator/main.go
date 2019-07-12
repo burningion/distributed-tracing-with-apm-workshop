@@ -88,7 +88,7 @@ func getConcurrent(span tracer.Span, l *log.Entry, w http.ResponseWriter, r *htt
 		return
 	}
 	// set a tag for the current path
-	span.SetTag("url.request", m)
+	span.SetTag("url.request", m.URL)
 
 	// log with matching trace ID
 	l.WithFields(log.Fields{
@@ -105,7 +105,7 @@ func getConcurrent(span tracer.Span, l *log.Entry, w http.ResponseWriter, r *htt
 
 	ch := make(chan string)
 	for i := 0; i < m.Total; i++ {
-		req, err := getWithContext(r.Context(), "http://"+os.Getenv("NODE_API_SERVICE_HOST")+os.Getenv("NODE_SERVICE_PORT_HTTP")+m.URL)
+		req, err := getWithContext(r.Context(), "http://"+os.Getenv("NODE_API_SERVICE_HOST")+os.Getenv("NODE_API_SERVICE_PORT")+m.URL)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -138,7 +138,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 
 	tracedClient := httptrace.WrapClient(&http.Client{Transport: tr})
 
-	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + os.Getenv("NODE_SERVICE_PORT_HTTP")
+	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + os.Getenv("NODE_API_SERVICE_PORT")
 
 	req, err := getWithContext(r.Context(), sensorsURL+"/users")
 	if err != nil {
@@ -165,7 +165,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 	randomUID := rjs[rand.Intn(len(rjs))].UID
 
 	ch := make(chan string)
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 20; i++ {
 		req, err := getWithContext(r.Context(), sensorsURL+"/users/"+randomUID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -175,7 +175,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 		go getURL(req, tracedClient, ch)
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 20; i++ {
 		l.WithFields(log.Fields{
 			"message": <-ch,
 		}).Info("random user url called with 20 concurrent")
