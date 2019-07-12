@@ -105,7 +105,7 @@ func getConcurrent(span tracer.Span, l *log.Entry, w http.ResponseWriter, r *htt
 
 	ch := make(chan string)
 	for i := 0; i < m.Total; i++ {
-		req, err := getWithContext(r.Context(), "http://"+os.Getenv("NODE_API_SERVICE_HOST")+os.Getenv("NODE_API_SERVICE_PORT")+m.URL)
+		req, err := getWithContext(r.Context(), "http://"+os.Getenv("NODE_API_SERVICE_HOST")+":"+os.Getenv("NODE_API_SERVICE_PORT")+m.URL)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -138,7 +138,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 
 	tracedClient := httptrace.WrapClient(&http.Client{Transport: tr})
 
-	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + os.Getenv("NODE_API_SERVICE_PORT")
+	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + ":" + os.Getenv("NODE_API_SERVICE_PORT")
 
 	req, err := getWithContext(r.Context(), sensorsURL+"/users")
 	if err != nil {
