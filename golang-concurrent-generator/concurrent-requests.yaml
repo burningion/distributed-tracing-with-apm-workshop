@@ -31,7 +31,7 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: DD_TRACE_AGENT_PORT
-          value: 8126
+          value: '8126'
         - name: DOGSTATSD_HOST_IP
           valueFrom:
             fieldRef:
