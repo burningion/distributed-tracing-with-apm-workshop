@@ -22,7 +22,7 @@ if os.environ['FLASK_DEBUG']:
 SENSORS_URL = f"http://{environ['SENSORS_API_SERVICE_HOST']}:{environ['SENSORS_API_SERVICE_PORT_HTTP']}"
 PUMPS_URL = f"http://{environ['PUMPS_SERVICE_SERVICE_HOST']}:{environ['PUMPS_SERVICE_SERVICE_PORT']}"
 NODE_URL = f"http://{environ['NODE_API_SERVICE_HOST']}:{environ['NODE_API_SERVICE_PORT_HTTP']}"
-GOLANG_URL = f"http://{environ['GO_CONCURRENT_SERVICE_SERVICE']}:{environ['GO_CONCURRENT_SERVICE_SERVICE_PORT']}"
+GOLANG_URL = f"http://{environ['GO_CONCURRENT_SERVICE_SERVICE_HOST']}:{environ['GO_CONCURRENT_SERVICE_SERVICE_PORT']}"
 
 app.logger.info("Sensors URL: " + SENSORS_URL)
 app.logger.info("Pumps URL: " + PUMPS_URL)
@@ -84,7 +84,7 @@ def call_generate_requests():
 
     if random.random() < use_new_api:
         answer = requests.post(f"{GOLANG_URL}/generate_requests_user", json=payload)
-        return jsonify({'response': str(answer.content))
+        return jsonify({'response': str(answer.content)})
     
     output = subprocess.check_output(['ddtrace-run', 
                                       '/app/traffic_generator.py',
@@ -108,7 +108,7 @@ def call_generate_requests_user():
     
     if random.random() < use_new_api:
         answer = requests.get(f"{GOLANG_URL}/generate_requests_user")
-        return jsonify({'response': str(answer.content))
+        return jsonify({'response': str(answer.content)})
 
     users = requests.get(f"{NODE_URL}/users").json()
     user = random.choice(users)
