@@ -165,7 +165,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 	randomUID := rjs[rand.Intn(len(rjs))].UID
 
 	ch := make(chan string)
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 100; i++ {
 		req, err := getWithContext(r.Context(), sensorsURL+"/users/"+randomUID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -175,7 +175,7 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 		go getURL(req, tracedClient, ch)
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 100; i++ {
 		l.WithFields(log.Fields{
 			"message": <-ch,
 		}).Info("random user url called with 20 concurrent")
