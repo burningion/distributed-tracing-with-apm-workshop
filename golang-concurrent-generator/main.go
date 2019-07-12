@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	log "github.com/Sirupsen/logrus"
 
@@ -21,6 +23,16 @@ type Message struct {
 	Concurrent int    `json:"concurrent"`
 	Total      int    `json:"total"`
 	URL        string `json:"url"`
+}
+
+// {"id":"1","uid":"123e4567-e89b-12d3-a456-426655440000","name":"City of Dorondo","demand_gph":"110","users":"201"}
+//
+type Users []struct {
+	ID        string `json:"id"`
+	UID       string `json:"uid"`
+	Name      string `json:"name"`
+	DemandGph string `json:"demand_gph"`
+	Users     string `json:"users"`
 }
 
 func postWithContext(ctx context.Context, url, contentType string, body io.Reader) (*http.Request, error) {
@@ -93,7 +105,7 @@ func getConcurrent(span tracer.Span, l *log.Entry, w http.ResponseWriter, r *htt
 
 	ch := make(chan string)
 	for i := 0; i < m.Total; i++ {
-		req, err := getWithContext(r.Context(), m.URL)
+		req, err := getWithContext(r.Context(), "http://"+os.Getenv("NODE_API_SERVICE_HOST")+os.Getenv("NODE_SERVICE_PORT_HTTP")+m.URL)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -128,9 +140,33 @@ func getConcurrentRandom(span tracer.Span, l *log.Entry, w http.ResponseWriter, 
 
 	sensorsURL := "http://" + os.Getenv("NODE_API_SERVICE_HOST") + os.Getenv("NODE_SERVICE_PORT_HTTP")
 
+	req, err := getWithContext(r.Context(), sensorsURL+"/users")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := tracedClient.Do(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	defer resp.Body.Close()
+
+	rjs := Users{}
+	err = json.NewDecoder(resp.Body).Decode(&rjs)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	rand.Seed(time.Now().Unix())
+	randomUID := rjs[rand.Intn(len(rjs))].UID
+
 	ch := make(chan string)
 	for i := 0; i < 100; i++ {
-		req, err := getWithContext(r.Context(), sensorsURL+"/users/1")
+		req, err := getWithContext(r.Context(), sensorsURL+"/users/"+randomUID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
