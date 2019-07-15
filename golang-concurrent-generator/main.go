@@ -25,8 +25,8 @@ type Message struct {
 	URL        string `json:"url"`
 }
 
-// {"id":"1","uid":"123e4567-e89b-12d3-a456-426655440000","name":"City of Dorondo","demand_gph":"110","users":"201"}
-//
+// {"id":"1","uid":"123e4567-e89b-12d3-a456-426655440000",
+//	"name":"City of Dorondo","demand_gph":"110","users":"201"}
 type Users []struct {
 	ID        string `json:"id"`
 	UID       string `json:"uid"`
