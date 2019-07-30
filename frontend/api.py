@@ -22,6 +22,7 @@ if os.environ['FLASK_DEBUG']:
 SENSORS_URL = f"http://{environ['SENSORS_API_SERVICE_HOST']}:{environ['SENSORS_API_SERVICE_PORT_HTTP']}"
 PUMPS_URL = f"http://{environ['PUMPS_SERVICE_SERVICE_HOST']}:{environ['PUMPS_SERVICE_SERVICE_PORT']}"
 NODE_URL = f"http://{environ['NODE_API_SERVICE_HOST']}:{environ['NODE_API_SERVICE_PORT_HTTP']}"
+GOLANG_URL = f"http://{environ['GO_CONCURRENT_SERVICE_SERVICE_HOST']}:{environ['GO_CONCURRENT_SERVICE_SERVICE_PORT']}"
 
 app.logger.info("Sensors URL: " + SENSORS_URL)
 app.logger.info("Pumps URL: " + PUMPS_URL)
@@ -67,6 +68,12 @@ def add_pump():
 @app.route('/generate_requests', methods=['POST'])
 def call_generate_requests():
     payload = flask_request.get_json()
+    use_new_api = 0
+    try:
+        use_new_api = float(environ['USE_NEW_API'])
+    except:
+        app.logger.info("USE_NEW_API not set, defaulting to zero")
+    
     span = tracer.current_span()
     app.logger.info(f"Looking at {span}")
     app.logger.info(f"with span id {span.span_id}")
@@ -75,6 +82,10 @@ def call_generate_requests():
     
     span.set_tags({'requests': payload['total'], 'concurrent': payload['concurrent']})
 
+    if random.random() < use_new_api:
+        answer = requests.post(f"{GOLANG_URL}/generate_requests_user", json=payload)
+        return jsonify({'response': str(answer.content)})
+    
     output = subprocess.check_output(['ddtrace-run', 
                                       '/app/traffic_generator.py',
                                       str(payload['concurrent']), 
@@ -89,6 +100,16 @@ def call_generate_requests():
 # enable user sampling because low request count
 @app.route('/generate_requests_user')
 def call_generate_requests_user():
+    use_new_api = 0
+    try:
+        use_new_api = float(environ['USE_NEW_API'])
+    except:
+        app.logger.info("USE_NEW_API not set, defaulting to zero")
+    
+    if random.random() < use_new_api:
+        answer = requests.get(f"{GOLANG_URL}/generate_requests_user")
+        return jsonify({'response': str(answer.content)})
+
     users = requests.get(f"{NODE_URL}/users").json()
     user = random.choice(users)
     span = tracer.current_span()
@@ -96,10 +117,10 @@ def call_generate_requests_user():
     span.set_tags({'user_id': user['id']})
 
     output = subprocess.check_output(['ddtrace-run',
-                                    '/app/traffic_generator.py',
-                                    '20',
-                                    '100',
-                                    f"{NODE_URL}/users/" + user['uid']])
+                                     '/app/traffic_generator.py',
+                                     '20',
+                                     '100',
+                                     f"{NODE_URL}/users/" + user['uid']])
     app.logger.info(f"Chose random user {user['name']} for requests: {output}")
     return jsonify({'random_user': user['name']})
 
