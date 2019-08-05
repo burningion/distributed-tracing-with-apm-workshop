@@ -1,13 +1,10 @@
 version: '3'
 services:
   agent:
-    image: "datadog/agent:6.9.0"
+    image: "datadog/agent:6.13.0"
     environment:
       - DD_API_KEY
       - DD_APM_ENABLED=true
-      # Add DD_APM_ANALYZED_SPANS to the Agent container environment.
-      # Compatible with version 12.6.5250 or above.
-      - DD_APM_ANALYZED_SPANS=users-api|express.request=1,sensors-api|flask.request=1,pumps-service|flask.request=1,iot-frontend|flask.request=1
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
       - DD_PROCESS_AGENT_ENABLED=true
