@@ -42,6 +42,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.hostIP
+          - name: DD_COLLECT_KUBERNETES_EVENTS
+            value: "true"
           # Logs
           - name: DD_LOGS_ENABLED
             value: "true"
