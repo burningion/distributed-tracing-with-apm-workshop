@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: frontend-service
-        image: burningion/k8s-distributed-tracing-frontend:latest
+        image: burningion/k8s-distributed-tracing-frontend:1.1
         imagePullPolicy: Always
         ports:
         - containerPort: 5005
