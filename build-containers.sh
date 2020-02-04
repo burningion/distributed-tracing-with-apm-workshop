@@ -1,4 +1,4 @@
-cd frontend/ && docker build -t frontend-service:latest . && cd ..
-cd node-api/ && docker build -t node-api:latest . && cd ..
-cd sensors/ && docker build -t sensors-api . && cd ..
-cd pumps/ && docker build -t pumps-service:latest . && cd ..
+cd frontend/ && docker build -t burningion/k8s-distributed-tracingfrontend:1.1 . && cd ..
+cd users/ && docker build -t burningion/k8s-distributed-tracing-users:1.1 . && cd ..
+cd sensors/ && docker build -t burningion/k8s-distributed-tracing-sensors:1.1 . && cd ..
+cd pumps/ && docker build -t burningion/k8s-distributed-tracing-pumps:1.1 . && cd ..
