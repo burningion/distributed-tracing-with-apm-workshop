@@ -16,6 +16,7 @@ spec:
         app: datadog-agent
       name: datadog-agent
     spec:
+      serviceAccountName: datadog-agent
       hostNetwork: true
       containers:
       - image: datadog/agent:7.17.0
@@ -37,6 +38,8 @@ spec:
                 name: datadog-api
                 key: token
           - name: KUBERNETES
+            value: "true"
+          - name: DD_KUBERNETES_POD_LABELS_AS_TAGS
             value: "true"
           - name: DD_KUBERNETES_KUBELET_HOST
             valueFrom:
