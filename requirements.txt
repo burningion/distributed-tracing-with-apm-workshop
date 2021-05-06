@@ -4,7 +4,7 @@ click==6.7
 ddtrace==0.23.0
 Flask==1.0.2
 Flask-Caching==1.4.0
-Flask-Cors==3.0.6
+Flask-Cors==3.0.9
 Flask-SQLAlchemy==2.3.2
 idna==2.7
 itsdangerous==0.24
