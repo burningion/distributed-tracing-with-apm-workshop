@@ -10,7 +10,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
-    "recharts": "^1.6.2"
+    "recharts": "^2.1.14"
   },
   "scripts": {
     "start": "react-scripts start",
