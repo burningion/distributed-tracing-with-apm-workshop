@@ -11,7 +11,7 @@
     "await-sleep": "0.0.1",
     "body-parser": "^1.18.3",
     "dd-trace": "^0.10.3",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "nodemon": "^1.18.4",
     "redis": "^2.8.0",
     "sleep-promise": "^8.0.1",
